@@ -1,4 +1,3 @@
-// components/IngredientRow.tsx
 import { useEffect, useState } from "react";
 import {
 	StyleSheet,

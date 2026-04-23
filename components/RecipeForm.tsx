@@ -1,4 +1,3 @@
-// components/RecipeForm.tsx
 import { useState } from "react";
 import {
 	Alert,
@@ -10,11 +9,11 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
+
 import IngredientRow from "@/components/IngredientRow";
 import type { Ingredient, Recipe } from "@/types/recipe";
-
+import {generateId} from "@/lib/generateId";
+const uuidv4 = generateId
 type Props = {
 	visible: boolean;
 	initial?: Recipe;
@@ -69,8 +68,19 @@ export default function RecipeForm({
 		setIngredients((prev) => [...prev, { id: uuidv4(), name: "", grams: 0 }]);
 	}
 
-	function removeIngredient(id: string) {
-		setIngredients((prev) => prev.filter((i) => i.id !== id));
+	function removeIngredient(id: string, ingredientName: string) {
+		Alert.alert(
+			"Remove ingredient",
+			`Remove "${ingredientName || "this ingredient"}"?`,
+			[
+				{ text: "Cancel", style: "cancel" },
+				{
+					text: "Remove",
+					style: "destructive",
+					onPress: () => setIngredients((prev) => prev.filter((i) => i.id !== id)),
+				},
+			],
+		);
 	}
 
 	function totalDough(): number {
@@ -183,7 +193,7 @@ export default function RecipeForm({
 							}
 							onGramsChange={(v) => updateGrams(ing.id, v)}
 							onPercentageChange={(v) => updatePercentage(ing.id, v)}
-							onDelete={isRequired ? undefined : () => removeIngredient(ing.id)}
+							onDelete={isRequired ? undefined : () => removeIngredient(ing.id, ing.name)}
 						/>
 					);
 				})}

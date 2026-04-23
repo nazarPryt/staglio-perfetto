@@ -1,4 +1,3 @@
-// app/(tabs)/recipes.tsx
 import { useState } from "react";
 import {
 	FlatList,
@@ -7,12 +6,14 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import RecipeCard from "@/components/RecipeCard";
 import RecipeForm from "@/components/RecipeForm";
 import { useRecipeStore } from "@/store/recipeStore";
 import type { Recipe } from "@/types/recipe";
 
 export default function RecipesScreen() {
+	const insets = useSafeAreaInsets();
 	const recipes = useRecipeStore((s) => s.recipes);
 	const addRecipe = useRecipeStore((s) => s.addRecipe);
 	const updateRecipe = useRecipeStore((s) => s.updateRecipe);
@@ -41,7 +42,7 @@ export default function RecipesScreen() {
 	}
 
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, { paddingTop: insets.top }]}>
 			<View style={styles.headerBar}>
 				<TouchableOpacity style={styles.newBtn} onPress={openNew}>
 					<Text style={styles.newBtnText}>+ New</Text>

@@ -1,4 +1,3 @@
-// components/RecipeCard.tsx
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import type { Recipe } from "@/types/recipe";
 

@@ -1,4 +1,3 @@
-// components/CalculatorForm.tsx
 import { useState } from "react";
 import {
 	StyleSheet,
@@ -283,20 +282,31 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		borderWidth: 1,
 		borderColor: "#2a2a4a",
-		padding: 12,
+		padding: 20,
 	},
 	resultHeader: {
 		color: "#7cffb2",
-		fontSize: 11,
+		fontSize: 15,
 		fontWeight: "bold",
 		textTransform: "uppercase",
 		letterSpacing: 0.5,
-		marginBottom: 10,
+		marginBottom: 16,
 	},
-	resultTableHeader: { flexDirection: "row", marginBottom: 6 },
-	resultHeaderCell: { color: "#555", fontSize: 10, textTransform: "uppercase" },
-	resultRow: { flexDirection: "row", marginBottom: 5 },
-	resultName: { color: "#aaa", fontSize: 13 },
-	resultGrams: { color: "#e0e0e0", fontSize: 13, fontWeight: "bold" },
-	resultPct: { color: "#666", fontSize: 12 },
+	resultTableHeader: {
+		flexDirection: "row",
+		marginBottom: 0,
+		paddingBottom: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: "#2a2a4a",
+	},
+	resultHeaderCell: { color: "#555", fontSize: 13, textTransform: "uppercase" },
+	resultRow: {
+		flexDirection: "row",
+		paddingVertical: 12,
+		borderBottomWidth: 1,
+		borderBottomColor: "#2a2a4a",
+	},
+	resultName: { color: "#aaa", fontSize: 18 },
+	resultGrams: { color: "#e0e0e0", fontSize: 18, fontWeight: "bold" },
+	resultPct: { color: "#666", fontSize: 16 },
 });
