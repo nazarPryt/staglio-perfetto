@@ -84,7 +84,7 @@ export default function RecipesScreen() {
 const styles = StyleSheet.create({
 	container: { flex: 1, backgroundColor: "#0f0f1a" },
 	headerBar: {
-		padding: 12,
+		padding: 16,
 		alignItems: "flex-end",
 		borderBottomWidth: 1,
 		borderBottomColor: "#2a2a4a",
@@ -92,11 +92,11 @@ const styles = StyleSheet.create({
 	newBtn: {
 		backgroundColor: "#7c9fff",
 		borderRadius: 6,
-		paddingVertical: 6,
-		paddingHorizontal: 14,
+		paddingVertical: 9,
+		paddingHorizontal: 18,
 	},
-	newBtnText: { color: "#000", fontWeight: "bold", fontSize: 13 },
+	newBtnText: { color: "#000", fontWeight: "bold", fontSize: 15 },
 	empty: { flex: 1, alignItems: "center", justifyContent: "center" },
-	emptyText: { color: "#555", fontSize: 14 },
-	list: { padding: 12 },
+	emptyText: { color: "#555", fontSize: 16 },
+	list: { padding: 16 },
 });

@@ -12,8 +12,8 @@ import {
 
 import IngredientRow from "@/components/IngredientRow";
 import type { Ingredient, Recipe } from "@/types/recipe";
-import {generateId} from "@/lib/generateId";
-const uuidv4 = generateId
+import { generateId } from "@/lib/generateId";
+const uuidv4 = generateId;
 type Props = {
 	visible: boolean;
 	initial?: Recipe;
@@ -77,7 +77,8 @@ export default function RecipeForm({
 				{
 					text: "Remove",
 					style: "destructive",
-					onPress: () => setIngredients((prev) => prev.filter((i) => i.id !== id)),
+					onPress: () =>
+						setIngredients((prev) => prev.filter((i) => i.id !== id)),
 				},
 			],
 		);
@@ -193,7 +194,11 @@ export default function RecipeForm({
 							}
 							onGramsChange={(v) => updateGrams(ing.id, v)}
 							onPercentageChange={(v) => updatePercentage(ing.id, v)}
-							onDelete={isRequired ? undefined : () => removeIngredient(ing.id, ing.name)}
+							onDelete={
+								isRequired
+									? undefined
+									: () => removeIngredient(ing.id, ing.name)
+							}
 						/>
 					);
 				})}
@@ -217,22 +222,22 @@ export default function RecipeForm({
 
 const styles = StyleSheet.create({
 	container: { flex: 1, backgroundColor: "#0f0f1a" },
-	content: { padding: 16, paddingBottom: 40 },
+	content: { padding: 20, paddingBottom: 48 },
 	header: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		marginBottom: 20,
+		marginBottom: 24,
 	},
-	title: { color: "#e0e0e0", fontSize: 18, fontWeight: "bold" },
-	closeBtn: { color: "#888", fontSize: 20, padding: 4 },
-	row: { flexDirection: "row", gap: 12, marginBottom: 16 },
+	title: { color: "#e0e0e0", fontSize: 22, fontWeight: "bold" },
+	closeBtn: { color: "#888", fontSize: 24, padding: 4 },
+	row: { flexDirection: "row", gap: 14, marginBottom: 20 },
 	label: {
 		color: "#888",
-		fontSize: 11,
+		fontSize: 13,
 		textTransform: "uppercase",
 		letterSpacing: 0.5,
-		marginBottom: 4,
+		marginBottom: 6,
 	},
 	input: {
 		backgroundColor: "#1a1a2e",
@@ -240,56 +245,56 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: "#2a2a4a",
 		color: "#e0e0e0",
-		fontSize: 13,
-		paddingVertical: 9,
-		paddingHorizontal: 12,
+		fontSize: 15,
+		paddingVertical: 12,
+		paddingHorizontal: 14,
 	},
 	tableHeader: {
 		flexDirection: "row",
 		paddingHorizontal: 4,
-		marginBottom: 4,
-		marginTop: 8,
+		marginBottom: 6,
+		marginTop: 10,
 	},
 	headerCell: {
 		color: "#555",
-		fontSize: 10,
+		fontSize: 12,
 		textTransform: "uppercase",
 	},
 	flourRow: {
 		flexDirection: "row",
 		alignItems: "center",
-		gap: 6,
-		marginBottom: 6,
+		gap: 8,
+		marginBottom: 8,
 		paddingHorizontal: 4,
 	},
 	lockedCell: {
 		color: "#666",
-		fontSize: 13,
-		paddingVertical: 8,
-		paddingHorizontal: 10,
+		fontSize: 15,
+		paddingVertical: 10,
+		paddingHorizontal: 12,
 		backgroundColor: "#1a1a2e",
 		borderRadius: 6,
 		borderWidth: 1,
 		borderColor: "#222",
 	},
-	addBtn: { color: "#7c9fff", fontSize: 13, marginTop: 8, marginBottom: 16 },
+	addBtn: { color: "#7c9fff", fontSize: 15, marginTop: 10, marginBottom: 18 },
 	totalRow: {
 		backgroundColor: "#1a1a2e",
 		borderRadius: 8,
 		borderWidth: 1,
 		borderColor: "#2a2a4a",
-		padding: 12,
+		padding: 16,
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginBottom: 20,
+		marginBottom: 24,
 	},
-	totalLabel: { color: "#888", fontSize: 13 },
-	totalValue: { color: "#7cffb2", fontSize: 14, fontWeight: "bold" },
+	totalLabel: { color: "#888", fontSize: 15 },
+	totalValue: { color: "#7cffb2", fontSize: 16, fontWeight: "bold" },
 	saveBtn: {
 		backgroundColor: "#7c9fff",
 		borderRadius: 8,
-		padding: 14,
+		padding: 18,
 		alignItems: "center",
 	},
-	saveBtnText: { color: "#000", fontWeight: "bold", fontSize: 15 },
+	saveBtnText: { color: "#000", fontWeight: "bold", fontSize: 17 },
 });

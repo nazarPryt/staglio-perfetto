@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
 	row: {
 		flexDirection: "row",
 		alignItems: "center",
-		gap: 6,
-		marginBottom: 6,
+		gap: 8,
+		marginBottom: 8,
 	},
 	cell: {
 		flex: 2,
@@ -96,9 +96,9 @@ const styles = StyleSheet.create({
 	},
 	nameText: {
 		color: "#666",
-		fontSize: 13,
-		paddingVertical: 8,
-		paddingHorizontal: 10,
+		fontSize: 15,
+		paddingVertical: 10,
+		paddingHorizontal: 12,
 		backgroundColor: "#1a1a2e",
 		borderRadius: 6,
 		borderWidth: 1,
@@ -110,19 +110,19 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: "#2a2a4a",
 		color: "#7c9fff",
-		fontSize: 13,
-		paddingVertical: 7,
-		paddingHorizontal: 10,
+		fontSize: 15,
+		paddingVertical: 10,
+		paddingHorizontal: 12,
 	},
 	deleteCell: {
-		width: 24,
+		width: 28,
 		alignItems: "center",
 	},
 	deleteBtn: {
 		color: "#ff7c7c",
-		fontSize: 16,
+		fontSize: 18,
 	},
 	lockIcon: {
-		fontSize: 12,
+		fontSize: 14,
 	},
 });
