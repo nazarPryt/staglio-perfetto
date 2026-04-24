@@ -17,7 +17,7 @@ type Props = {
 	locked?: boolean;
 };
 
-export default function IngredientRow({
+export const IngredientRow = ({
 	name,
 	grams,
 	onNameChange,
@@ -25,7 +25,7 @@ export default function IngredientRow({
 	onPercentageChange,
 	onDelete,
 	locked = false,
-}: Props) {
+}: Props) => {
 	const gramsNum = parseFloat(grams) || 0;
 	const derivedPct = (gramsNum / 10).toFixed(1);
 	const [pctDisplay, setPctDisplay] = useState(derivedPct);
@@ -78,7 +78,7 @@ export default function IngredientRow({
 			</View>
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	row: {

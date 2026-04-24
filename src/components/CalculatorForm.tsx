@@ -1,40 +1,27 @@
 import { useState } from "react";
-import {
-	StyleSheet,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { calcByCount, calcByFlour } from "@/bll/calculations";
 import type {
 	CalcByCountResult,
 	CalcByFlourResult,
 	Recipe,
 } from "@/types/recipe";
+import { type Mode, ModeToggle, RecipePicker, ResultTable } from "./calculator";
 
 type Result = CalcByCountResult | CalcByFlourResult | null;
-
-type Mode = "by-count" | "by-flour";
 
 type Props = {
 	recipes: Recipe[];
 };
 
-export default function CalculatorForm({ recipes }: Props) {
+export const CalculatorForm = ({ recipes }: Props) => {
 	const [selectedId, setSelectedId] = useState<string>(recipes[0]?.id ?? "");
 	const [mode, setMode] = useState<Mode>("by-count");
 	const [inputValue, setInputValue] = useState("");
-	const [pickerOpen, setPickerOpen] = useState(false);
 
 	const recipe = recipes.find((r) => r.id === selectedId);
 
-	const totalDoughPerKg = recipe
-		? (1000 + recipe.ingredients.reduce((s, i) => s + i.grams, 0)).toFixed(0)
-		: "—";
-
 	let result: Result = null;
-
 	if (recipe) {
 		const val = parseFloat(inputValue);
 		if (val > 0) {
@@ -67,87 +54,23 @@ export default function CalculatorForm({ recipes }: Props) {
 
 	return (
 		<View style={styles.container}>
-			{/* Recipe picker */}
-			<View style={styles.section}>
-				<Text style={styles.label}>Recipe</Text>
-				<TouchableOpacity
-					style={styles.picker}
-					onPress={() => setPickerOpen((v) => !v)}
-				>
-					<Text style={styles.pickerText}>{recipe?.name ?? "Select…"}</Text>
-					<Text style={styles.pickerChevron}>▾</Text>
-				</TouchableOpacity>
-				{pickerOpen && (
-					<View style={styles.pickerDropdown}>
-						{recipes.map((r) => (
-							<TouchableOpacity
-								key={r.id}
-								style={styles.pickerOption}
-								onPress={() => {
-									setSelectedId(r.id);
-									setPickerOpen(false);
-									setInputValue("");
-								}}
-							>
-								<Text style={styles.pickerOptionText}>{r.name}</Text>
-							</TouchableOpacity>
-						))}
-					</View>
-				)}
-				{recipe && (
-					<Text style={styles.hint}>
-						Ball weight: {recipe.ballWeight}g · Dough per 1kg flour:{" "}
-						{totalDoughPerKg}g
-					</Text>
-				)}
-			</View>
+			<RecipePicker
+				recipes={recipes}
+				selectedId={selectedId}
+				onSelect={(id) => {
+					setSelectedId(id);
+					setInputValue("");
+				}}
+			/>
 
-			{/* Mode toggle */}
-			<View style={styles.section}>
-				<Text style={styles.label}>Mode</Text>
-				<View style={styles.toggle}>
-					<TouchableOpacity
-						style={[
-							styles.toggleOption,
-							mode === "by-count" && styles.toggleActive,
-						]}
-						onPress={() => {
-							setMode("by-count");
-							setInputValue("");
-						}}
-					>
-						<Text
-							style={[
-								styles.toggleText,
-								mode === "by-count" && styles.toggleTextActive,
-							]}
-						>
-							How many balls?
-						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={[
-							styles.toggleOption,
-							mode === "by-flour" && styles.toggleActive,
-						]}
-						onPress={() => {
-							setMode("by-flour");
-							setInputValue("");
-						}}
-					>
-						<Text
-							style={[
-								styles.toggleText,
-								mode === "by-flour" && styles.toggleTextActive,
-							]}
-						>
-							Flour available
-						</Text>
-					</TouchableOpacity>
-				</View>
-			</View>
+			<ModeToggle
+				mode={mode}
+				onChange={(m) => {
+					setMode(m);
+					setInputValue("");
+				}}
+			/>
 
-			{/* Input */}
 			<View style={styles.section}>
 				<Text style={styles.label}>
 					{mode === "by-count"
@@ -164,58 +87,12 @@ export default function CalculatorForm({ recipes }: Props) {
 				/>
 			</View>
 
-			{/* Result */}
 			{result && (
-				<View style={styles.result}>
-					<Text style={styles.resultHeader}>{resultHeader()}</Text>
-
-					<View style={styles.resultTableHeader}>
-						<Text style={[styles.resultHeaderCell, { flex: 3 }]}>
-							Ingredient
-						</Text>
-						<Text
-							style={[styles.resultHeaderCell, { flex: 2, textAlign: "right" }]}
-						>
-							Grams
-						</Text>
-						<Text
-							style={[styles.resultHeaderCell, { flex: 1, textAlign: "right" }]}
-						>
-							%
-						</Text>
-					</View>
-
-					{/* Flour row */}
-					<View style={styles.resultRow}>
-						<Text style={[styles.resultName, { flex: 3 }]}>Flour</Text>
-						<Text style={[styles.resultGrams, { flex: 2, textAlign: "right" }]}>
-							{mode === "by-count"
-								? `${Math.round((result as CalcByCountResult).flourGrams)}g`
-								: `${Math.round((result as CalcByFlourResult).flourGrams)}g`}
-						</Text>
-						<Text style={[styles.resultPct, { flex: 1, textAlign: "right" }]}>
-							100%
-						</Text>
-					</View>
-
-					{result.ingredients.map((ing) => (
-						<View key={ing.name} style={styles.resultRow}>
-							<Text style={[styles.resultName, { flex: 3 }]}>{ing.name}</Text>
-							<Text
-								style={[styles.resultGrams, { flex: 2, textAlign: "right" }]}
-							>
-								{Math.round(ing.grams)}g
-							</Text>
-							<Text style={[styles.resultPct, { flex: 1, textAlign: "right" }]}>
-								{ing.percentage}%
-							</Text>
-						</View>
-					))}
-				</View>
+				<ResultTable result={result} mode={mode} header={resultHeader()} />
 			)}
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	container: { flex: 1 },
@@ -229,43 +106,6 @@ const styles = StyleSheet.create({
 		letterSpacing: 0.5,
 		marginBottom: 6,
 	},
-	hint: { color: "#555", fontSize: 13, marginTop: 6 },
-	picker: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		padding: 14,
-		flexDirection: "row",
-		justifyContent: "space-between",
-	},
-	pickerText: { color: "#e0e0e0", fontSize: 15 },
-	pickerChevron: { color: "#888" },
-	pickerDropdown: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		marginTop: 4,
-	},
-	pickerOption: {
-		padding: 14,
-		borderBottomWidth: 1,
-		borderBottomColor: "#2a2a4a",
-	},
-	pickerOptionText: { color: "#e0e0e0", fontSize: 15 },
-	toggle: {
-		flexDirection: "row",
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		padding: 4,
-	},
-	toggleOption: { flex: 1, borderRadius: 6, padding: 11, alignItems: "center" },
-	toggleActive: { backgroundColor: "#7c9fff" },
-	toggleText: { color: "#666", fontSize: 14 },
-	toggleTextActive: { color: "#000", fontWeight: "bold" },
 	input: {
 		backgroundColor: "#1a1a2e",
 		borderRadius: 8,
@@ -277,36 +117,4 @@ const styles = StyleSheet.create({
 		paddingVertical: 14,
 		paddingHorizontal: 16,
 	},
-	result: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		padding: 24,
-	},
-	resultHeader: {
-		color: "#7cffb2",
-		fontSize: 17,
-		fontWeight: "bold",
-		textTransform: "uppercase",
-		letterSpacing: 0.5,
-		marginBottom: 18,
-	},
-	resultTableHeader: {
-		flexDirection: "row",
-		marginBottom: 0,
-		paddingBottom: 12,
-		borderBottomWidth: 1,
-		borderBottomColor: "#2a2a4a",
-	},
-	resultHeaderCell: { color: "#555", fontSize: 13, textTransform: "uppercase" },
-	resultRow: {
-		flexDirection: "row",
-		paddingVertical: 16,
-		borderBottomWidth: 1,
-		borderBottomColor: "#2a2a4a",
-	},
-	resultName: { color: "#aaa", fontSize: 20 },
-	resultGrams: { color: "#e0e0e0", fontSize: 20, fontWeight: "bold" },
-	resultPct: { color: "#666", fontSize: 18 },
 });

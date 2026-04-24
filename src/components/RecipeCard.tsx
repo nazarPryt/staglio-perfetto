@@ -7,7 +7,7 @@ type Props = {
 	onDelete: () => void;
 };
 
-export default function RecipeCard({ recipe, onEdit, onDelete }: Props) {
+export const RecipeCard = ({ recipe, onEdit, onDelete }: Props) => {
 	function handleDelete() {
 		Alert.alert(
 			"Delete Recipe",
@@ -42,7 +42,7 @@ export default function RecipeCard({ recipe, onEdit, onDelete }: Props) {
 			</View>
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	card: {

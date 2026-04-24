@@ -7,8 +7,8 @@ import {
 	View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import RecipeCard from "@/components/RecipeCard";
-import RecipeForm from "@/components/RecipeForm";
+import { RecipeCard } from "@/components/RecipeCard";
+import { RecipeForm } from "@/components/RecipeForm";
 import { useRecipeStore } from "@/store/recipeStore";
 import type { Recipe } from "@/types/recipe";
 

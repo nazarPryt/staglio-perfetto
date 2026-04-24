@@ -1,5 +1,5 @@
-import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import { type Href, useRouter } from "expo-router";
+import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function Index() {
 	const router = useRouter();

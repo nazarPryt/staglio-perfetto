@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import CalculatorForm from "@/components/CalculatorForm";
+import { CalculatorForm } from "@/components/CalculatorForm";
 import { useRecipeStore } from "@/store/recipeStore";
 
 export default function CalculatorScreen() {
