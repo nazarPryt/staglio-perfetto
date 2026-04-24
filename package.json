@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"scripts": {
 		"start": "expo start",
-		"android": "expo start --android",
+		"android": "adb reverse tcp:8081 tcp:8081 && expo start --android --localhost",
 		"ios": "expo start --ios",
 		"web": "expo start --web",
 		"check": "biome check .",

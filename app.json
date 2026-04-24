@@ -1,46 +1,58 @@
 {
-	"expo": {
-		"name": "staglio-perfetto",
-		"slug": "staglio-perfetto",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/images/app-icon.png",
-		"scheme": "staglioperfetto",
-		"userInterfaceStyle": "automatic",
-		"newArchEnabled": true,
-		"ios": {
-			"supportsTablet": true
-		},
-		"android": {
-			"adaptiveIcon": {
-				"backgroundColor": "#000000",
-				"foregroundImage": "./assets/images/app-icon.png"
-			},
-			"edgeToEdgeEnabled": true,
-			"predictiveBackGestureEnabled": false
-		},
-		"web": {
-			"output": "static",
-			"favicon": "./assets/images/app-icon.png"
-		},
-		"plugins": [
-			"expo-router",
-			[
-				"expo-splash-screen",
-				{
-					"image": "./assets/images/app-icon.png",
-					"imageWidth": 200,
-					"resizeMode": "contain",
-					"backgroundColor": "#ffffff",
-					"dark": {
-						"backgroundColor": "#000000"
-					}
-				}
-			]
-		],
-		"experiments": {
-			"typedRoutes": true,
-			"reactCompiler": true
-		}
-	}
+  "expo": {
+    "name": "staglio-perfetto",
+    "slug": "staglio-perfetto",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/app-icon.png",
+    "scheme": "staglioperfetto",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nazarpryt.staglioperfetto",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#000000",
+        "foregroundImage": "./assets/images/app-icon.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.nazarpryt.staglioperfetto"
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/app-icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/app-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "backgroundColor": "#000000"
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8a2a8af5-a296-4612-999d-76737fc3fb15"
+      }
+    },
+    "owner": "nazarpryt"
+  }
 }
