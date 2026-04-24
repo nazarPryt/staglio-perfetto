@@ -53,7 +53,6 @@ export const IngredientRow = ({
 				value={grams}
 				onChangeText={onGramsChange}
 				keyboardType="decimal-pad"
-				editable={!locked}
 				placeholder="0"
 				placeholderTextColor="#555"
 			/>
@@ -63,7 +62,6 @@ export const IngredientRow = ({
 				onChangeText={setPctDisplay}
 				onBlur={() => onPercentageChange(pctDisplay)}
 				keyboardType="decimal-pad"
-				editable={!locked}
 				placeholder="0"
 				placeholderTextColor="#555"
 			/>

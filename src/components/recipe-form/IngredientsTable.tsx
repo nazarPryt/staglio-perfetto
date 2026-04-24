@@ -1,8 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { REQUIRED_IDS } from "@/bll/ingredientUtils";
 import { IngredientRow } from "@/components/IngredientRow";
 import type { Ingredient } from "@/types/recipe";
-
-const REQUIRED_IDS = new Set(["water", "salt", "yeast"]);
 
 type Props = {
 	ingredients: Ingredient[];

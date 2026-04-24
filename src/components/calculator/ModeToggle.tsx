@@ -1,6 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-export type Mode = "by-count" | "by-flour";
+import type { Mode } from "@/types/recipe";
 
 type Props = {
 	mode: Mode;

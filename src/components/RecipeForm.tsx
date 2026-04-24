@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import {
 	Alert,
 	Modal,
@@ -8,9 +8,11 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { calcTotalDough, REQUIRED_IDS } from "@/bll/ingredientUtils";
 import { generateId } from "@/lib/generateId";
-import type { Ingredient, Recipe } from "@/types/recipe";
+import type { Recipe } from "@/types/recipe";
 import { IngredientsTable, RecipeBasicFields } from "./recipe-form";
+import { formReducer, initialFormState } from "./recipe-form/formReducer";
 
 type Props = {
 	visible: boolean;
@@ -19,52 +21,11 @@ type Props = {
 	onClose: () => void;
 };
 
-const DEFAULT_INGREDIENTS: Ingredient[] = [
-	{ id: "water", name: "Water", grams: 650 },
-	{ id: "salt", name: "Salt", grams: 25 },
-	{ id: "yeast", name: "Yeast", grams: 3 },
-];
-
-const REQUIRED_IDS = new Set(["water", "salt", "yeast"]);
-
 export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
-	const [name, setName] = useState(initial?.name ?? "");
-	const [ballWeight, setBallWeight] = useState(
-		initial?.ballWeight?.toString() ?? "280",
-	);
-	const [ingredients, setIngredients] = useState<Ingredient[]>(
-		initial?.ingredients ?? DEFAULT_INGREDIENTS,
-	);
+	const [state, dispatch] = useReducer(formReducer, initialFormState(initial));
+	const { name, ballWeight, ingredients } = state;
 
-	function updateGrams(id: string, raw: string) {
-		setIngredients((prev) =>
-			prev.map((i) =>
-				i.id === id ? { ...i, grams: parseFloat(raw) || 0 } : i,
-			),
-		);
-	}
-
-	function updatePercentage(id: string, raw: string) {
-		const pct = parseFloat(raw) || 0;
-		setIngredients((prev) =>
-			prev.map((i) => (i.id === id ? { ...i, grams: pct * 10 } : i)),
-		);
-	}
-
-	function updateName(id: string, value: string) {
-		setIngredients((prev) =>
-			prev.map((i) => (i.id === id ? { ...i, name: value } : i)),
-		);
-	}
-
-	function addIngredient() {
-		setIngredients((prev) => [
-			...prev,
-			{ id: generateId(), name: "", grams: 0 },
-		]);
-	}
-
-	function removeIngredient(id: string, ingredientName: string) {
+	function handleRemove(id: string, ingredientName: string) {
 		Alert.alert(
 			"Remove ingredient",
 			`Remove "${ingredientName || "this ingredient"}"?`,
@@ -73,8 +34,7 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 				{
 					text: "Remove",
 					style: "destructive",
-					onPress: () =>
-						setIngredients((prev) => prev.filter((i) => i.id !== id)),
+					onPress: () => dispatch({ type: "REMOVE_INGREDIENT", id }),
 				},
 			],
 		);
@@ -109,8 +69,6 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 		});
 	}
 
-	const totalDough = 1000 + ingredients.reduce((sum, i) => sum + i.grams, 0);
-
 	return (
 		<Modal visible={visible} animationType="slide" onRequestClose={onClose}>
 			<ScrollView
@@ -129,18 +87,26 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 				<RecipeBasicFields
 					name={name}
 					ballWeight={ballWeight}
-					onNameChange={setName}
-					onBallWeightChange={setBallWeight}
+					onNameChange={(value) => dispatch({ type: "SET_NAME", value })}
+					onBallWeightChange={(value) =>
+						dispatch({ type: "SET_BALL_WEIGHT", value })
+					}
 				/>
 
 				<IngredientsTable
 					ingredients={ingredients}
-					totalDough={totalDough}
-					onUpdateGrams={updateGrams}
-					onUpdatePercentage={updatePercentage}
-					onUpdateName={updateName}
-					onAdd={addIngredient}
-					onRemove={removeIngredient}
+					totalDough={calcTotalDough(ingredients)}
+					onUpdateGrams={(id, raw) =>
+						dispatch({ type: "UPDATE_GRAMS", id, raw })
+					}
+					onUpdatePercentage={(id, raw) =>
+						dispatch({ type: "UPDATE_PERCENTAGE", id, raw })
+					}
+					onUpdateName={(id, value) =>
+						dispatch({ type: "UPDATE_NAME", id, value })
+					}
+					onAdd={() => dispatch({ type: "ADD_INGREDIENT" })}
+					onRemove={handleRemove}
 				/>
 
 				<TouchableOpacity style={styles.saveBtn} onPress={handleSave}>

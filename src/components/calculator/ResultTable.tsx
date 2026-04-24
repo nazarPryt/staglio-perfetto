@@ -1,6 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
-import type { CalcByCountResult, CalcByFlourResult } from "@/types/recipe";
-import type { Mode } from "./ModeToggle";
+import type {
+	CalcByCountResult,
+	CalcByFlourResult,
+	Mode,
+} from "@/types/recipe";
 
 type Props = {
 	result: CalcByCountResult | CalcByFlourResult;

@@ -1,46 +1,34 @@
-import { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import { calcByCount, calcByFlour } from "@/bll/calculations";
-import type {
-	CalcByCountResult,
-	CalcByFlourResult,
-	Recipe,
-} from "@/types/recipe";
-import { type Mode, ModeToggle, RecipePicker, ResultTable } from "./calculator";
-
-type Result = CalcByCountResult | CalcByFlourResult | null;
+import { useReducer, useState } from "react";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { calcResult, calcResultHeader } from "@/bll/calculatorUtils";
+import type { Recipe } from "@/types/recipe";
+import {
+	ModeToggle,
+	RecipePicker,
+	ResultModal,
+	ResultTable,
+} from "./calculator";
+import {
+	calculatorReducer,
+	initialCalculatorState,
+} from "./calculator/calculatorReducer";
 
 type Props = {
 	recipes: Recipe[];
 };
 
 export const CalculatorForm = ({ recipes }: Props) => {
-	const [selectedId, setSelectedId] = useState<string>(recipes[0]?.id ?? "");
-	const [mode, setMode] = useState<Mode>("by-count");
-	const [inputValue, setInputValue] = useState("");
+	const [state, dispatch] = useReducer(
+		calculatorReducer,
+		initialCalculatorState(recipes),
+	);
+	const [modalVisible, setModalVisible] = useState(false);
+	const { selectedId, mode, inputValue } = state;
 
 	const recipe = recipes.find((r) => r.id === selectedId);
-
-	let result: Result = null;
-	if (recipe) {
-		const val = parseFloat(inputValue);
-		if (val > 0) {
-			result =
-				mode === "by-count"
-					? calcByCount(recipe, val)
-					: calcByFlour(recipe, val);
-		}
-	}
-
-	function resultHeader(): string {
-		if (!result || !recipe) return "";
-		if (mode === "by-count") {
-			const r = result as CalcByCountResult;
-			return `${inputValue} balls × ${recipe.ballWeight}g = ${r.totalDoughGrams}g total dough`;
-		}
-		const r = result as CalcByFlourResult;
-		return `${r.ballCount} balls · ${r.totalDoughGrams}g total dough`;
-	}
+	const result = recipe ? calcResult(recipe, mode, inputValue) : null;
+	const header =
+		result && recipe ? calcResultHeader(result, mode, recipe, inputValue) : "";
 
 	if (recipes.length === 0) {
 		return (
@@ -57,18 +45,12 @@ export const CalculatorForm = ({ recipes }: Props) => {
 			<RecipePicker
 				recipes={recipes}
 				selectedId={selectedId}
-				onSelect={(id) => {
-					setSelectedId(id);
-					setInputValue("");
-				}}
+				onSelect={(id) => dispatch({ type: "SELECT_RECIPE", id })}
 			/>
 
 			<ModeToggle
 				mode={mode}
-				onChange={(m) => {
-					setMode(m);
-					setInputValue("");
-				}}
+				onChange={(mode) => dispatch({ type: "SET_MODE", mode })}
 			/>
 
 			<View style={styles.section}>
@@ -80,15 +62,30 @@ export const CalculatorForm = ({ recipes }: Props) => {
 				<TextInput
 					style={styles.input}
 					value={inputValue}
-					onChangeText={setInputValue}
+					onChangeText={(value) => dispatch({ type: "SET_INPUT", value })}
 					keyboardType="decimal-pad"
 					placeholder={mode === "by-count" ? "e.g. 8" : "e.g. 2.5"}
 					placeholderTextColor="#555"
 				/>
 			</View>
 
-			{result && (
-				<ResultTable result={result} mode={mode} header={resultHeader()} />
+			{result && recipe && (
+				<>
+					<ResultTable result={result} mode={mode} header={header} />
+					<Pressable
+						style={styles.previewButton}
+						onPress={() => setModalVisible(true)}
+					>
+						<Text style={styles.previewButtonText}>Preview</Text>
+					</Pressable>
+					<ResultModal
+						visible={modalVisible}
+						result={result}
+						mode={mode}
+						header={header}
+						onClose={() => setModalVisible(false)}
+					/>
+				</>
 			)}
 		</View>
 	);
@@ -116,5 +113,19 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		paddingVertical: 14,
 		paddingHorizontal: 16,
+	},
+	previewButton: {
+		marginTop: 16,
+		backgroundColor: "#7cffb2",
+		borderRadius: 8,
+		paddingVertical: 14,
+		alignItems: "center",
+	},
+	previewButtonText: {
+		color: "#0d0d1a",
+		fontSize: 17,
+		fontWeight: "bold",
+		textTransform: "uppercase",
+		letterSpacing: 0.5,
 	},
 });

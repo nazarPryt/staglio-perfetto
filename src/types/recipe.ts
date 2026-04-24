@@ -30,3 +30,5 @@ export type CalcByFlourResult = {
 	totalDoughGrams: number;
 	ingredients: IngredientResult[];
 };
+
+export type Mode = "by-count" | "by-flour";
