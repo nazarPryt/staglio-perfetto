@@ -7,12 +7,6 @@ type Props = {
 	onDelete: () => void;
 };
 
-function ingredientSummary(recipe: Recipe): string {
-	return recipe.ingredients
-		.map((i) => `${i.name} ${(i.grams / 10).toFixed(1)}%`)
-		.join(" · ");
-}
-
 export default function RecipeCard({ recipe, onEdit, onDelete }: Props) {
 	function handleDelete() {
 		Alert.alert(
@@ -29,9 +23,14 @@ export default function RecipeCard({ recipe, onEdit, onDelete }: Props) {
 		<View style={styles.card}>
 			<View style={styles.info}>
 				<Text style={styles.name}>{recipe.name}</Text>
-				<Text style={styles.summary}>
-					Ball: {recipe.ballWeight}g · {ingredientSummary(recipe)}
+				<Text style={styles.summaryLine}>
+					Ball weight: {recipe.ballWeight}g
 				</Text>
+				{recipe.ingredients.map((i) => (
+					<Text key={i.id} style={styles.summaryLine}>
+						{i.name}: {(i.grams / 10).toFixed(1)}%
+					</Text>
+				))}
 			</View>
 			<View style={styles.actions}>
 				<TouchableOpacity onPress={onEdit}>
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
 	},
 	info: { flex: 1, marginRight: 8 },
 	name: { color: "#e0e0e0", fontWeight: "bold", fontSize: 17 },
-	summary: { color: "#888", fontSize: 13, marginTop: 4 },
+	summaryLine: { color: "#888", fontSize: 13, marginTop: 3 },
 	actions: { flexDirection: "row", gap: 16 },
 	editBtn: { color: "#7c9fff", fontSize: 15 },
 	deleteBtn: { color: "#ff7c7c", fontSize: 15 },

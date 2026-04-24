@@ -1,5 +1,5 @@
 import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import { type Href, useRouter } from "expo-router";
 
 export default function Index() {
 	const router = useRouter();
@@ -7,11 +7,11 @@ export default function Index() {
 	return (
 		<TouchableOpacity
 			style={styles.container}
-			onPress={() => router.replace("/(tabs)/recipes")}
+			onPress={() => router.replace("/(tabs)/recipes" as Href)}
 			activeOpacity={1}
 		>
 			<ImageBackground
-				source={require("@/assets/images/main-screen.png")}
+				source={require("@assets/images/main-screen.png")}
 				style={styles.image}
 				resizeMode="cover"
 			/>

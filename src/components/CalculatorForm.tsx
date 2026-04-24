@@ -170,11 +170,11 @@ export default function CalculatorForm({ recipes }: Props) {
 					<Text style={styles.resultHeader}>{resultHeader()}</Text>
 
 					<View style={styles.resultTableHeader}>
-						<Text style={[styles.resultHeaderCell, { flex: 2 }]}>
+						<Text style={[styles.resultHeaderCell, { flex: 3 }]}>
 							Ingredient
 						</Text>
 						<Text
-							style={[styles.resultHeaderCell, { flex: 1, textAlign: "right" }]}
+							style={[styles.resultHeaderCell, { flex: 2, textAlign: "right" }]}
 						>
 							Grams
 						</Text>
@@ -187,11 +187,11 @@ export default function CalculatorForm({ recipes }: Props) {
 
 					{/* Flour row */}
 					<View style={styles.resultRow}>
-						<Text style={[styles.resultName, { flex: 2 }]}>Flour</Text>
-						<Text style={[styles.resultGrams, { flex: 1, textAlign: "right" }]}>
+						<Text style={[styles.resultName, { flex: 3 }]}>Flour</Text>
+						<Text style={[styles.resultGrams, { flex: 2, textAlign: "right" }]}>
 							{mode === "by-count"
-								? `${(result as CalcByCountResult).flourGrams}g`
-								: `${(result as CalcByFlourResult).flourGrams}g`}
+								? `${Math.round((result as CalcByCountResult).flourGrams)}g`
+								: `${Math.round((result as CalcByFlourResult).flourGrams)}g`}
 						</Text>
 						<Text style={[styles.resultPct, { flex: 1, textAlign: "right" }]}>
 							100%
@@ -200,11 +200,11 @@ export default function CalculatorForm({ recipes }: Props) {
 
 					{result.ingredients.map((ing) => (
 						<View key={ing.name} style={styles.resultRow}>
-							<Text style={[styles.resultName, { flex: 2 }]}>{ing.name}</Text>
+							<Text style={[styles.resultName, { flex: 3 }]}>{ing.name}</Text>
 							<Text
-								style={[styles.resultGrams, { flex: 1, textAlign: "right" }]}
+								style={[styles.resultGrams, { flex: 2, textAlign: "right" }]}
 							>
-								{ing.grams}g
+								{Math.round(ing.grams)}g
 							</Text>
 							<Text style={[styles.resultPct, { flex: 1, textAlign: "right" }]}>
 								{ing.percentage}%

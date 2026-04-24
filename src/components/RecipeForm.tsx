@@ -13,7 +13,6 @@ import {
 import IngredientRow from "@/components/IngredientRow";
 import type { Ingredient, Recipe } from "@/types/recipe";
 import { generateId } from "@/lib/generateId";
-const uuidv4 = generateId;
 type Props = {
 	visible: boolean;
 	initial?: Recipe;
@@ -65,7 +64,7 @@ export default function RecipeForm({
 	}
 
 	function addIngredient() {
-		setIngredients((prev) => [...prev, { id: uuidv4(), name: "", grams: 0 }]);
+		setIngredients((prev) => [...prev, { id: generateId(), name: "", grams: 0 }]);
 	}
 
 	function removeIngredient(id: string, ingredientName: string) {
@@ -109,7 +108,7 @@ export default function RecipeForm({
 			return;
 		}
 		const recipe: Recipe = {
-			id: initial?.id ?? uuidv4(),
+			id: initial?.id ?? generateId(),
 			name: name.trim(),
 			ballWeight: weight,
 			ingredients,
