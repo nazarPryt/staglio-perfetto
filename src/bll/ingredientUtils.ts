@@ -1,12 +1,12 @@
 import { generateId } from "@/lib/generateId";
-import type { Ingredient } from "@/types/recipe";
+import type { Ingredient, IngredientType } from "@/types/recipe";
 
 export const REQUIRED_IDS = new Set(["water", "salt", "yeast"]);
 
 export const DEFAULT_INGREDIENTS: Ingredient[] = [
-	{ id: "water", name: "Water", grams: 650 },
-	{ id: "salt", name: "Salt", grams: 25 },
-	{ id: "yeast", name: "Yeast", grams: 3 },
+	{ id: "water", name: "Water", grams: 650, type: "water" },
+	{ id: "salt", name: "Salt", grams: 25, type: "salt" },
+	{ id: "yeast", name: "Yeast", grams: 3, type: "yeast" },
 ];
 
 export const setIngredientGrams = (
@@ -33,6 +33,13 @@ export const setIngredientName = (
 	value: string,
 ): Ingredient[] =>
 	ingredients.map((i) => (i.id === id ? { ...i, name: value } : i));
+
+export const setIngredientType = (
+	ingredients: Ingredient[],
+	id: string,
+	type: IngredientType,
+): Ingredient[] =>
+	ingredients.map((i) => (i.id === id ? { ...i, type } : i));
 
 export const addIngredient = (ingredients: Ingredient[]): Ingredient[] => [
 	...ingredients,

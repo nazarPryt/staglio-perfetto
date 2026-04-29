@@ -5,6 +5,7 @@ import {
 	setIngredientGrams,
 	setIngredientName,
 	setIngredientPercentage,
+	setIngredientType,
 } from "@/bll/ingredientUtils";
 import type { Ingredient } from "@/types/recipe";
 
@@ -103,5 +104,17 @@ describe("calcTotalDough", () => {
 
 	test("returns 1000 for empty ingredients", () => {
 		expect(calcTotalDough([])).toBe(1000);
+	});
+});
+
+describe("setIngredientType", () => {
+	test("updates type for matching id", () => {
+		const result = setIngredientType(base, "water", "water");
+		expect(result.find((i) => i.id === "water")?.type).toBe("water");
+	});
+
+	test("leaves other ingredients unchanged", () => {
+		const result = setIngredientType(base, "water", "water");
+		expect(result.find((i) => i.id === "salt")?.type).toBeUndefined();
 	});
 });
