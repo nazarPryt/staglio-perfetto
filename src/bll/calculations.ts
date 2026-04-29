@@ -190,3 +190,116 @@ export function calcBiga(
 	};
 }
 
+export function calcAutolyse(
+	recipe: Recipe,
+	totalFlourGrams: number,
+): TwoStepDoughResult {
+	const { autolyseWaterPct = 100, ingredients } = recipe;
+
+	const waterIng = ingredients.find((i) => i.type === "water");
+	const yeastIng = ingredients.find((i) => i.type === "yeast");
+	const saltIng = ingredients.find((i) => i.type === "salt");
+	const otherIngs = ingredients.filter((i) => !i.type || i.type === "other");
+
+	const hydrationPct = waterIng ? waterIng.grams / 10 : 0;
+	const totalWater = round1((totalFlourGrams * hydrationPct) / 100);
+	const autolyseWater = round1((totalWater * autolyseWaterPct) / 100);
+	const finalWater = round1(totalWater - autolyseWater);
+
+	const step1Ingredients: IngredientResult[] = [
+		{
+			name: waterIng?.name ?? "Water",
+			grams: autolyseWater,
+			percentage: round1((autolyseWater / totalFlourGrams) * 100),
+			type: "water",
+		},
+	];
+	const step1TotalGrams = round1(totalFlourGrams + autolyseWater);
+
+	const step2Ingredients: IngredientResult[] = [];
+
+	if (finalWater > 0) {
+		step2Ingredients.push({
+			name: waterIng?.name ?? "Water",
+			grams: finalWater,
+			percentage: round1((finalWater / totalFlourGrams) * 100),
+			type: "water",
+		});
+	}
+	if (yeastIng) {
+		const grams = round1((totalFlourGrams * (yeastIng.grams / 10)) / 100);
+		step2Ingredients.push({
+			name: yeastIng.name,
+			grams,
+			percentage: round1(yeastIng.grams / 10),
+			type: "yeast",
+		});
+	}
+	if (saltIng) {
+		const grams = round1((totalFlourGrams * (saltIng.grams / 10)) / 100);
+		step2Ingredients.push({
+			name: saltIng.name,
+			grams,
+			percentage: round1(saltIng.grams / 10),
+			type: "salt",
+		});
+	}
+	for (const ing of otherIngs) {
+		const grams = round1((totalFlourGrams * (ing.grams / 10)) / 100);
+		step2Ingredients.push({
+			name: ing.name,
+			grams,
+			percentage: round1(ing.grams / 10),
+			type: "other" as IngredientType,
+		});
+	}
+	step2Ingredients.push({
+		name: "Autolyse",
+		grams: step1TotalGrams,
+		percentage: round1((step1TotalGrams / totalFlourGrams) * 100),
+		source: "preferment",
+		type: "other" as IngredientType,
+	});
+
+	const step2TotalGrams = round1(
+		step2Ingredients.reduce((s, i) => s + i.grams, 0),
+	);
+
+	const yeastGrams = yeastIng
+		? round1((totalFlourGrams * (yeastIng.grams / 10)) / 100)
+		: 0;
+	const saltGrams = saltIng
+		? round1((totalFlourGrams * (saltIng.grams / 10)) / 100)
+		: 0;
+	const otherTotal = otherIngs.reduce(
+		(s, i) => s + round1((totalFlourGrams * (i.grams / 10)) / 100),
+		0,
+	);
+	const totalDoughGrams = round1(
+		totalFlourGrams + totalWater + yeastGrams + saltGrams + otherTotal,
+	);
+
+	return {
+		kind: "two-step",
+		step1Label: "Autolyse",
+		totalFlourGrams,
+		totalDoughGrams,
+		step1: {
+			flourBase: totalFlourGrams,
+			flourGrams: totalFlourGrams,
+			totalFlourGrams,
+			totalWaterGrams: autolyseWater,
+			totalGrams: step1TotalGrams,
+			ingredients: step1Ingredients,
+		},
+		step2: {
+			flourBase: totalFlourGrams,
+			flourGrams: 0,
+			totalFlourGrams,
+			totalWaterGrams: finalWater,
+			totalGrams: step2TotalGrams,
+			ingredients: step2Ingredients,
+		},
+	};
+}
+
