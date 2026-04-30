@@ -1,16 +1,13 @@
 import { useKeepAwake } from "expo-keep-awake";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import type {
-	CalcByCountResult,
-	CalcByFlourResult,
-	Mode,
-} from "@/types/recipe";
+import type { DoughCalcResult, Mode } from "@/types/recipe";
 import { ResultTable } from "./ResultTable";
+import { TwoStepResult } from "./TwoStepResult";
 
 type Props = {
 	visible: boolean;
-	result: CalcByCountResult | CalcByFlourResult;
+	result: DoughCalcResult;
 	mode: Mode;
 	header: string;
 	onClose: () => void;
@@ -39,7 +36,12 @@ export const ResultModal = ({
 							<Text style={styles.closeText}>✕ Close</Text>
 						</Pressable>
 					</View>
-					<ResultTable result={result} mode={mode} header={header} />
+					{result.kind === "single" && (
+						<ResultTable result={result} mode={mode} header={header} />
+					)}
+					{result.kind === "two-step" && (
+						<TwoStepResult result={result} header={header} />
+					)}
 					<Text style={styles.hint}>Screen stays on while this is open.</Text>
 				</View>
 			</SafeAreaView>

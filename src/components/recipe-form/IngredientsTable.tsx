@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { REQUIRED_IDS } from "@/bll/ingredientUtils";
 import { IngredientRow } from "@/components/IngredientRow";
-import type { Ingredient } from "@/types/recipe";
+import type { Ingredient, IngredientType } from "@/types/recipe";
 
 type Props = {
 	ingredients: Ingredient[];
@@ -9,6 +9,7 @@ type Props = {
 	onUpdateGrams: (id: string, value: string) => void;
 	onUpdatePercentage: (id: string, value: string) => void;
 	onUpdateName: (id: string, value: string) => void;
+	onUpdateType: (id: string, type: IngredientType) => void;
 	onAdd: () => void;
 	onRemove: (id: string, name: string) => void;
 };
@@ -19,6 +20,7 @@ export const IngredientsTable = ({
 	onUpdateGrams,
 	onUpdatePercentage,
 	onUpdateName,
+	onUpdateType,
 	onAdd,
 	onRemove,
 }: Props) => {
@@ -55,12 +57,16 @@ export const IngredientsTable = ({
 						key={ing.id}
 						name={ing.name}
 						grams={ing.grams.toString()}
+						type={ing.type}
 						locked={isRequired}
 						onNameChange={
 							isRequired ? undefined : (v) => onUpdateName(ing.id, v)
 						}
 						onGramsChange={(v) => onUpdateGrams(ing.id, v)}
 						onPercentageChange={(v) => onUpdatePercentage(ing.id, v)}
+						onTypeChange={
+							isRequired ? undefined : (t) => onUpdateType(ing.id, t)
+						}
 						onDelete={isRequired ? undefined : () => onRemove(ing.id, ing.name)}
 					/>
 				);

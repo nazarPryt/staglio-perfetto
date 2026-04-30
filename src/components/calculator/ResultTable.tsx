@@ -1,22 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
-import type {
-	CalcByCountResult,
-	CalcByFlourResult,
-	Mode,
-} from "@/types/recipe";
+import type { IngredientResult, Mode } from "@/types/recipe";
+
+type ResultLike = {
+	flourGrams: number;
+	ingredients: IngredientResult[];
+};
 
 type Props = {
-	result: CalcByCountResult | CalcByFlourResult;
+	result: ResultLike;
 	mode: Mode;
 	header: string;
 };
 
-export const ResultTable = ({ result, mode, header }: Props) => {
-	const flourGrams = Math.round(
-		mode === "by-count"
-			? (result as CalcByCountResult).flourGrams
-			: (result as CalcByFlourResult).flourGrams,
-	);
+export const ResultTable = ({ result, header }: Props) => {
+	const flourGrams = Math.round(result.flourGrams);
 
 	return (
 		<View style={styles.container}>
@@ -41,9 +38,29 @@ export const ResultTable = ({ result, mode, header }: Props) => {
 			</View>
 
 			{result.ingredients.map((ing) => (
-				<View key={ing.name} style={styles.row}>
-					<Text style={[styles.name, { flex: 3 }]}>{ing.name}</Text>
-					<Text style={[styles.grams, { flex: 2, textAlign: "right" }]}>
+				<View
+					key={ing.name}
+					style={[
+						styles.row,
+						ing.source === "preferment" && styles.prefermentRow,
+					]}
+				>
+					<Text
+						style={[
+							styles.name,
+							{ flex: 3 },
+							ing.source === "preferment" && styles.prefermentText,
+						]}
+					>
+						{ing.name}
+					</Text>
+					<Text
+						style={[
+							styles.grams,
+							{ flex: 2, textAlign: "right" },
+							ing.source === "preferment" && styles.prefermentText,
+						]}
+					>
 						{Math.round(ing.grams)}g
 					</Text>
 					<Text style={[styles.pct, { flex: 1, textAlign: "right" }]}>
@@ -84,7 +101,9 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor: "#2a2a4a",
 	},
+	prefermentRow: { backgroundColor: "#0d1f0d" },
 	name: { color: "#aaa", fontSize: 20 },
 	grams: { color: "#e0e0e0", fontSize: 20, fontWeight: "bold" },
 	pct: { color: "#666", fontSize: 18 },
+	prefermentText: { color: "#7cffb2" },
 });

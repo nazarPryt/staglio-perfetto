@@ -23,7 +23,16 @@ type Props = {
 
 export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 	const [state, dispatch] = useReducer(formReducer, initialFormState(initial));
-	const { name, ballWeight, ingredients } = state;
+	const {
+		name,
+		ballWeight,
+		ingredients,
+		doughMethod,
+		prefermentFlourPct,
+		prefermentHydration,
+		bigaYeastPercentOnBigaFlour,
+		autolyseWaterPct,
+	} = state;
 
 	function handleRemove(id: string, ingredientName: string) {
 		Alert.alert(
@@ -66,6 +75,23 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 			ballWeight: weight,
 			ingredients,
 			createdAt: initial?.createdAt ?? Date.now(),
+			doughMethod,
+			prefermentFlourPct:
+				doughMethod === "biga"
+					? parseFloat(prefermentFlourPct) || 40
+					: undefined,
+			prefermentHydration:
+				doughMethod === "biga"
+					? parseFloat(prefermentHydration) || 45
+					: undefined,
+			bigaYeastPercentOnBigaFlour:
+				doughMethod === "biga"
+					? parseFloat(bigaYeastPercentOnBigaFlour) || 0.2
+					: undefined,
+			autolyseWaterPct:
+				doughMethod === "autolyse"
+					? parseFloat(autolyseWaterPct) || 100
+					: undefined,
 		});
 	}
 
@@ -87,9 +113,29 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 				<RecipeBasicFields
 					name={name}
 					ballWeight={ballWeight}
+					doughMethod={doughMethod}
+					prefermentFlourPct={prefermentFlourPct}
+					prefermentHydration={prefermentHydration}
+					bigaYeastPercentOnBigaFlour={bigaYeastPercentOnBigaFlour}
+					autolyseWaterPct={autolyseWaterPct}
 					onNameChange={(value) => dispatch({ type: "SET_NAME", value })}
 					onBallWeightChange={(value) =>
 						dispatch({ type: "SET_BALL_WEIGHT", value })
+					}
+					onDoughMethodChange={(method) =>
+						dispatch({ type: "SET_DOUGH_METHOD", method })
+					}
+					onPrefermentFlourPctChange={(value) =>
+						dispatch({ type: "SET_PREFERMENT_FLOUR_PCT", value })
+					}
+					onPrefermentHydrationChange={(value) =>
+						dispatch({ type: "SET_PREFERMENT_HYDRATION", value })
+					}
+					onBigaYeastPctChange={(value) =>
+						dispatch({ type: "SET_BIGA_YEAST_PCT", value })
+					}
+					onAutolyseWaterPctChange={(value) =>
+						dispatch({ type: "SET_AUTOLYSE_WATER_PCT", value })
 					}
 				/>
 
@@ -104,6 +150,9 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 					}
 					onUpdateName={(id, value) =>
 						dispatch({ type: "UPDATE_NAME", id, value })
+					}
+					onUpdateType={(id, ingredientType) =>
+						dispatch({ type: "UPDATE_TYPE", id, ingredientType })
 					}
 					onAdd={() => dispatch({ type: "ADD_INGREDIENT" })}
 					onRemove={handleRemove}

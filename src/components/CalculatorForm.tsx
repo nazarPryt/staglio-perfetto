@@ -7,6 +7,7 @@ import {
 	RecipePicker,
 	ResultModal,
 	ResultTable,
+	TwoStepResult,
 } from "./calculator";
 import {
 	calculatorReducer,
@@ -28,7 +29,9 @@ export const CalculatorForm = ({ recipes }: Props) => {
 	const recipe = recipes.find((r) => r.id === selectedId);
 	const result = recipe ? calcResult(recipe, mode, inputValue) : null;
 	const header =
-		result && recipe ? calcResultHeader(result, mode, recipe, inputValue) : "";
+		result && result.kind !== "error" && recipe
+			? calcResultHeader(result, mode, recipe, inputValue)
+			: "";
 
 	if (recipes.length === 0) {
 		return (
@@ -40,6 +43,10 @@ export const CalculatorForm = ({ recipes }: Props) => {
 		);
 	}
 
+	const methodLabel = recipe?.doughMethod
+		? recipe.doughMethod.toUpperCase()
+		: "DIRECT";
+
 	return (
 		<View style={styles.container}>
 			<RecipePicker
@@ -50,7 +57,7 @@ export const CalculatorForm = ({ recipes }: Props) => {
 
 			<ModeToggle
 				mode={mode}
-				onChange={(mode) => dispatch({ type: "SET_MODE", mode })}
+				onChange={(m) => dispatch({ type: "SET_MODE", mode: m })}
 			/>
 
 			<View style={styles.section}>
@@ -69,9 +76,40 @@ export const CalculatorForm = ({ recipes }: Props) => {
 				/>
 			</View>
 
-			{result && recipe && (
+			{result?.kind === "error" && (
+				<View style={styles.errorBox}>
+					<Text style={styles.errorText}>{result.message}</Text>
+				</View>
+			)}
+
+			{result && result.kind === "single" && (
 				<>
+					<View style={styles.methodBadge}>
+						<Text style={styles.methodBadgeText}>{methodLabel}</Text>
+					</View>
 					<ResultTable result={result} mode={mode} header={header} />
+					<Pressable
+						style={styles.previewButton}
+						onPress={() => setModalVisible(true)}
+					>
+						<Text style={styles.previewButtonText}>Preview</Text>
+					</Pressable>
+					<ResultModal
+						visible={modalVisible}
+						result={result}
+						mode={mode}
+						header={header}
+						onClose={() => setModalVisible(false)}
+					/>
+				</>
+			)}
+
+			{result && result.kind === "two-step" && (
+				<>
+					<View style={styles.methodBadge}>
+						<Text style={styles.methodBadgeText}>{methodLabel}</Text>
+					</View>
+					<TwoStepResult result={result} header={header} />
 					<Pressable
 						style={styles.previewButton}
 						onPress={() => setModalVisible(true)}
@@ -114,6 +152,30 @@ const styles = StyleSheet.create({
 		paddingVertical: 14,
 		paddingHorizontal: 16,
 	},
+	methodBadge: {
+		alignSelf: "flex-start",
+		backgroundColor: "#1a1a2e",
+		borderRadius: 5,
+		borderWidth: 1,
+		borderColor: "#7c9fff",
+		paddingHorizontal: 10,
+		paddingVertical: 3,
+		marginBottom: 12,
+	},
+	methodBadgeText: {
+		color: "#7c9fff",
+		fontSize: 11,
+		letterSpacing: 0.5,
+	},
+	errorBox: {
+		backgroundColor: "#2a0d0d",
+		borderRadius: 8,
+		borderWidth: 1,
+		borderColor: "#ff7c7c",
+		padding: 14,
+		marginBottom: 12,
+	},
+	errorText: { color: "#ff7c7c", fontSize: 14 },
 	previewButton: {
 		marginTop: 16,
 		backgroundColor: "#7cffb2",

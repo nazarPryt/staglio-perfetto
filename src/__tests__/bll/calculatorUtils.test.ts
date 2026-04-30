@@ -1,9 +1,5 @@
 import { calcResult, calcResultHeader } from "@/bll/calculatorUtils";
-import type {
-	CalcByCountResult,
-	CalcByFlourResult,
-	Recipe,
-} from "@/types/recipe";
+import type { Recipe, SingleDoughResult } from "@/types/recipe";
 
 const recipe: Recipe = {
 	id: "1",
@@ -31,25 +27,25 @@ describe("calcResult", () => {
 	});
 
 	test("by-count returns totalDoughGrams = balls × ballWeight", () => {
-		const result = calcResult(recipe, "by-count", "8") as CalcByCountResult;
+		const result = calcResult(recipe, "by-count", "8") as SingleDoughResult;
 		expect(result.totalDoughGrams).toBe(2240);
 	});
 
 	test("by-flour returns ball count for 1 kg", () => {
-		const result = calcResult(recipe, "by-flour", "1") as CalcByFlourResult;
+		const result = calcResult(recipe, "by-flour", "1") as SingleDoughResult;
 		expect(result.ballCount).toBe(5);
 	});
 });
 
 describe("calcResultHeader", () => {
 	test("by-count shows balls × weight = total", () => {
-		const result = calcResult(recipe, "by-count", "8") as CalcByCountResult;
+		const result = calcResult(recipe, "by-count", "8") as SingleDoughResult;
 		const header = calcResultHeader(result, "by-count", recipe, "8");
 		expect(header).toBe("8 balls × 280g = 2240g total dough");
 	});
 
 	test("by-flour shows ball count and total dough", () => {
-		const result = calcResult(recipe, "by-flour", "1") as CalcByFlourResult;
+		const result = calcResult(recipe, "by-flour", "1") as SingleDoughResult;
 		const header = calcResultHeader(result, "by-flour", recipe, "1");
 		expect(header).toBe("5 balls · 1678g total dough");
 	});
