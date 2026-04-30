@@ -38,8 +38,7 @@ export const setIngredientType = (
 	ingredients: Ingredient[],
 	id: string,
 	type: IngredientType,
-): Ingredient[] =>
-	ingredients.map((i) => (i.id === id ? { ...i, type } : i));
+): Ingredient[] => ingredients.map((i) => (i.id === id ? { ...i, type } : i));
 
 export const addIngredient = (ingredients: Ingredient[]): Ingredient[] => [
 	...ingredients,

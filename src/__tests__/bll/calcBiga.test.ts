@@ -51,13 +51,17 @@ describe("calcBiga", () => {
 
 	test("water closure: step1.totalWaterGrams + step2.totalWaterGrams = total water", () => {
 		const result = calcBiga(recipe, 1000) as TwoStepDoughResult;
-		expect(result.step1.totalWaterGrams + result.step2.totalWaterGrams).toBeCloseTo(650);
+		expect(
+			result.step1.totalWaterGrams + result.step2.totalWaterGrams,
+		).toBeCloseTo(650);
 	});
 
 	test("yeast closure: biga yeast + final yeast = total yeast", () => {
 		const result = calcBiga(recipe, 1000) as TwoStepDoughResult;
-		const bigaYeast = result.step1.ingredients.find((i) => i.type === "yeast")?.grams ?? 0;
-		const finalYeast = result.step2.ingredients.find((i) => i.type === "yeast")?.grams ?? 0;
+		const bigaYeast =
+			result.step1.ingredients.find((i) => i.type === "yeast")?.grams ?? 0;
+		const finalYeast =
+			result.step2.ingredients.find((i) => i.type === "yeast")?.grams ?? 0;
 		expect(bigaYeast + finalYeast).toBeCloseTo(3);
 	});
 
@@ -73,7 +77,9 @@ describe("calcBiga", () => {
 
 	test("step2 has Biga preferment ingredient", () => {
 		const result = calcBiga(recipe, 1000) as TwoStepDoughResult;
-		const biga = result.step2.ingredients.find((i) => i.source === "preferment");
+		const biga = result.step2.ingredients.find(
+			(i) => i.source === "preferment",
+		);
 		expect(biga).toBeDefined();
 		expect(biga?.name).toBe("Biga");
 		expect(biga?.grams).toBeCloseTo(580.8, 0);

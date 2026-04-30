@@ -58,7 +58,9 @@ describe("calcAutolyse", () => {
 
 	test("step2 has Autolyse preferment ingredient", () => {
 		const result = calcAutolyse(recipe, 1000) as TwoStepDoughResult;
-		const autolyse = result.step2.ingredients.find((i) => i.source === "preferment");
+		const autolyse = result.step2.ingredients.find(
+			(i) => i.source === "preferment",
+		);
 		expect(autolyse).toBeDefined();
 		expect(autolyse?.name).toBe("Autolyse");
 		expect(autolyse?.grams).toBeCloseTo(1650, 0);

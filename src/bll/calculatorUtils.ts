@@ -65,7 +65,7 @@ export const calcResult = (
 	}
 	if (method === "autolyse") {
 		const res = calcAutolyse(recipe, totalFlour);
-		if (mode === "by-flour") {
+		if (res.kind === "two-step" && mode === "by-flour") {
 			return {
 				...res,
 				ballCount: Math.floor(res.totalDoughGrams / recipe.ballWeight),
