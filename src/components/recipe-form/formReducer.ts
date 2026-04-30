@@ -7,7 +7,12 @@ import {
 	setIngredientPercentage,
 	setIngredientType,
 } from "@/bll/ingredientUtils";
-import type { DoughMethod, Ingredient, IngredientType, Recipe } from "@/types/recipe";
+import type {
+	DoughMethod,
+	Ingredient,
+	IngredientType,
+	Recipe,
+} from "@/types/recipe";
 
 export type FormState = {
 	name: string;
@@ -60,7 +65,11 @@ export const formReducer = (
 		case "UPDATE_GRAMS":
 			return {
 				...state,
-				ingredients: setIngredientGrams(state.ingredients, action.id, action.raw),
+				ingredients: setIngredientGrams(
+					state.ingredients,
+					action.id,
+					action.raw,
+				),
 			};
 		case "UPDATE_PERCENTAGE":
 			return {

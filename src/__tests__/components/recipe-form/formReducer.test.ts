@@ -1,4 +1,4 @@
-import { DEFAULT_INGREDIENTS, setIngredientType } from "@/bll/ingredientUtils";
+import { DEFAULT_INGREDIENTS } from "@/bll/ingredientUtils";
 import {
 	type FormState,
 	formReducer,
@@ -134,33 +134,49 @@ describe("initialFormState — dough method defaults", () => {
 
 describe("formReducer — dough method actions", () => {
 	test("SET_DOUGH_METHOD updates doughMethod", () => {
-		const next = formReducer(state, { type: "SET_DOUGH_METHOD", method: "biga" });
+		const next = formReducer(state, {
+			type: "SET_DOUGH_METHOD",
+			method: "biga",
+		});
 		expect(next.doughMethod).toBe("biga");
 	});
 
 	test("SET_PREFERMENT_FLOUR_PCT updates prefermentFlourPct", () => {
-		const next = formReducer(state, { type: "SET_PREFERMENT_FLOUR_PCT", value: "50" });
+		const next = formReducer(state, {
+			type: "SET_PREFERMENT_FLOUR_PCT",
+			value: "50",
+		});
 		expect(next.prefermentFlourPct).toBe("50");
 	});
 
 	test("SET_PREFERMENT_HYDRATION updates prefermentHydration", () => {
-		const next = formReducer(state, { type: "SET_PREFERMENT_HYDRATION", value: "50" });
+		const next = formReducer(state, {
+			type: "SET_PREFERMENT_HYDRATION",
+			value: "50",
+		});
 		expect(next.prefermentHydration).toBe("50");
 	});
 
 	test("SET_BIGA_YEAST_PCT updates bigaYeastPercentOnBigaFlour", () => {
-		const next = formReducer(state, { type: "SET_BIGA_YEAST_PCT", value: "0.3" });
+		const next = formReducer(state, {
+			type: "SET_BIGA_YEAST_PCT",
+			value: "0.3",
+		});
 		expect(next.bigaYeastPercentOnBigaFlour).toBe("0.3");
 	});
 
 	test("SET_AUTOLYSE_WATER_PCT updates autolyseWaterPct", () => {
-		const next = formReducer(state, { type: "SET_AUTOLYSE_WATER_PCT", value: "80" });
+		const next = formReducer(state, {
+			type: "SET_AUTOLYSE_WATER_PCT",
+			value: "80",
+		});
 		expect(next.autolyseWaterPct).toBe("80");
 	});
 
 	test("UPDATE_TYPE updates type on matching ingredient", () => {
 		const withCustom = formReducer(state, { type: "ADD_INGREDIENT" });
-		const customId = withCustom.ingredients[withCustom.ingredients.length - 1].id;
+		const customId =
+			withCustom.ingredients[withCustom.ingredients.length - 1].id;
 		const next = formReducer(withCustom, {
 			type: "UPDATE_TYPE",
 			id: customId,
