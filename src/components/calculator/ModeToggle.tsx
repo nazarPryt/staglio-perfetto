@@ -12,6 +12,8 @@ export const ModeToggle = ({ mode, onChange }: Props) => {
 			<Text style={styles.label}>Mode</Text>
 			<View style={styles.toggle}>
 				<TouchableOpacity
+					testID="mode_by_count"
+					accessibilityLabel="mode_by_count"
 					style={[styles.option, mode === "by-count" && styles.optionActive]}
 					onPress={() => onChange("by-count")}
 				>
@@ -25,6 +27,8 @@ export const ModeToggle = ({ mode, onChange }: Props) => {
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
+					testID="mode_by_flour"
+					accessibilityLabel="mode_by_flour"
 					style={[styles.option, mode === "by-flour" && styles.optionActive]}
 					onPress={() => onChange("by-flour")}
 				>

@@ -1,0 +1,36 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# Biga recipe with defaults: prefermentFlourPct=40, prefermentHydration=45, bigaYeastPct=0.2
+# Ingredients: Water=650g, Salt=25g, Yeast=3g
+# Input: 1 kg flour → Step1 biga water=180g, total flour=1000g, total dough=1678g
+- launchApp
+- runFlow: ../helpers/setup_biga_recipe.yaml
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Biga"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "1"
+- scrollUntilVisible:
+    element:
+      id: "step1_label"
+    direction: DOWN
+- assertVisible:
+    id: "step1_label"
+- assertVisible:
+    id: "step2_label"
+- assertVisible:
+    id: "step1_label_grams_water"
+- scrollUntilVisible:
+    element:
+      id: "totals_label_flour"
+    direction: DOWN
+- assertVisible:
+    id: "result_total_flour"
+- assertVisible:
+    id: "result_total_dough"

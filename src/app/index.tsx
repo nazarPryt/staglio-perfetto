@@ -9,6 +9,7 @@ export default function Index() {
 			style={styles.container}
 			onPress={() => router.replace("/(tabs)/recipes" as Href)}
 			activeOpacity={1}
+			testID="main-screen-btn"
 		>
 			<ImageBackground
 				source={require("@assets/images/main-screen.png")}

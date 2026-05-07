@@ -55,6 +55,7 @@ export const IngredientsTable = ({
 				return (
 					<IngredientRow
 						key={ing.id}
+						ingredientId={ing.id}
 						name={ing.name}
 						grams={ing.grams.toString()}
 						type={ing.type}

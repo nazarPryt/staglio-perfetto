@@ -14,6 +14,7 @@ type Props = {
 	name: string;
 	grams: string;
 	type?: IngredientType;
+	ingredientId?: string;
 	onNameChange?: (value: string) => void;
 	onGramsChange: (value: string) => void;
 	onPercentageChange: (value: string) => void;
@@ -26,6 +27,7 @@ export const IngredientRow = ({
 	name,
 	grams,
 	type,
+	ingredientId,
 	onNameChange,
 	onGramsChange,
 	onPercentageChange,
@@ -62,6 +64,7 @@ export const IngredientRow = ({
 					keyboardType="decimal-pad"
 					placeholder="0"
 					placeholderTextColor="#555"
+					testID={ingredientId ? `grams-${ingredientId}` : undefined}
 				/>
 				<TextInput
 					style={[styles.cell, styles.input, styles.numericCell]}

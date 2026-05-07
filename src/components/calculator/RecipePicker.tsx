@@ -19,6 +19,8 @@ export const RecipePicker = ({ recipes, selectedId, onSelect }: Props) => {
 		<View style={styles.section}>
 			<Text style={styles.label}>Recipe</Text>
 			<TouchableOpacity
+				testID="recipe_picker"
+				accessibilityLabel="recipe_picker"
 				style={styles.picker}
 				onPress={() => setOpen((v) => !v)}
 			>
@@ -30,6 +32,8 @@ export const RecipePicker = ({ recipes, selectedId, onSelect }: Props) => {
 					{recipes.map((r) => (
 						<TouchableOpacity
 							key={r.id}
+							testID={`recipe_option_${r.name.replace(/\s+/g, "_")}`}
+							accessibilityLabel={`recipe_option_${r.name.replace(/\s+/g, "_")}`}
 							style={styles.pickerOption}
 							onPress={() => {
 								onSelect(r.id);

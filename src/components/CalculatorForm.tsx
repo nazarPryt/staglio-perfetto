@@ -67,6 +67,8 @@ export const CalculatorForm = ({ recipes }: Props) => {
 						: "Flour available (kg)"}
 				</Text>
 				<TextInput
+					testID="calculator_input"
+					accessibilityLabel="calculator_input"
 					style={styles.input}
 					value={inputValue}
 					onChangeText={(value) => dispatch({ type: "SET_INPUT", value })}

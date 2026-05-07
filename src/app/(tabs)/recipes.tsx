@@ -44,7 +44,7 @@ export default function RecipesScreen() {
 	return (
 		<View style={[styles.container, { paddingTop: insets.top }]}>
 			<View style={styles.headerBar}>
-				<TouchableOpacity style={styles.newBtn} onPress={openNew}>
+				<TouchableOpacity style={styles.newBtn} onPress={openNew} testID="new_recipe_btn" accessibilityLabel="new_recipe_btn">
 					<Text style={styles.newBtnText}>+ New</Text>
 				</TouchableOpacity>
 			</View>

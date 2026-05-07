@@ -19,6 +19,8 @@ export default function TabLayout() {
 				options={{
 					title: "Recipes",
 					tabBarLabel: "Recipes",
+					tabBarButtonTestID: "tab_recipes",
+					tabBarAccessibilityLabel: "tab_recipes",
 					tabBarIcon: ({ color, size }) => (
 						<Ionicons name="restaurant-outline" size={size} color={color} />
 					),
@@ -29,6 +31,8 @@ export default function TabLayout() {
 				options={{
 					title: "Calculator",
 					tabBarLabel: "Calculator",
+					tabBarButtonTestID: "tab_calculator",
+					tabBarAccessibilityLabel: "tab_calculator",
 					tabBarIcon: ({ color, size }) => (
 						<Ionicons name="calculator-outline" size={size} color={color} />
 					),

@@ -4,11 +4,12 @@ import type { StepIngredients, TwoStepDoughResult } from "@/types/recipe";
 type StepBlockProps = {
 	step: StepIngredients;
 	title: string;
+	testID?: string;
 };
 
-const StepBlock = ({ step, title }: StepBlockProps) => (
+const StepBlock = ({ step, title, testID }: StepBlockProps) => (
 	<View style={styles.block}>
-		<Text style={styles.stepLabel}>{title}</Text>
+		<Text testID={testID} accessibilityLabel={testID} style={styles.stepLabel}>{title}</Text>
 		<View style={styles.tableHeader}>
 			<Text style={[styles.headerCell, { flex: 3 }]}>Ingredient</Text>
 			<Text style={[styles.headerCell, { flex: 2, textAlign: "right" }]}>
@@ -45,6 +46,7 @@ const StepBlock = ({ step, title }: StepBlockProps) => (
 					{ing.source === "preferment" ? `+ ${ing.name}` : ing.name}
 				</Text>
 				<Text
+					testID={testID ? `${testID}_grams_${ing.name.toLowerCase().replace(/\s+/g, "_")}` : undefined}
 					style={[
 						styles.grams,
 						{ flex: 2, textAlign: "right" },
@@ -69,19 +71,19 @@ type Props = {
 export const TwoStepResult = ({ result, header }: Props) => (
 	<View>
 		<Text style={styles.header}>{header}</Text>
-		<StepBlock step={result.step1} title={`Step 1 — ${result.step1Label}`} />
+		<StepBlock step={result.step1} title={`Step 1 — ${result.step1Label}`} testID="step1_label" />
 		<View style={styles.gap} />
-		<StepBlock step={result.step2} title="Step 2 — Final Dough" />
+		<StepBlock step={result.step2} title="Step 2 — Final Dough" testID="step2_label" />
 		<View style={styles.totalsRow}>
 			<View style={styles.totalsItem}>
-				<Text style={styles.totalsLabel}>Total flour</Text>
-				<Text style={styles.totalsValue}>
+				<Text testID="totals_label_flour" accessibilityLabel="totals_label_flour" style={styles.totalsLabel}>Total flour</Text>
+				<Text testID="result_total_flour" style={styles.totalsValue}>
 					{Math.round(result.totalFlourGrams)}g
 				</Text>
 			</View>
 			<View style={styles.totalsItem}>
 				<Text style={styles.totalsLabel}>Total dough</Text>
-				<Text style={styles.totalsValue}>
+				<Text testID="result_total_dough" style={styles.totalsValue}>
 					{Math.round(result.totalDoughGrams)}g
 				</Text>
 			</View>

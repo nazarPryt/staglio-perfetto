@@ -1,0 +1,27 @@
+appId: com.nazarpryt.staglioperfetto
+---
+- launchApp
+- runFlow: ../helpers/setup_direct_recipe.yaml
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Direct"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "1"
+- scrollUntilVisible:
+    element:
+      id: "result_flour_grams"
+    direction: DOWN
+- assertVisible:
+    id: "result_flour_grams"
+- assertVisible:
+    id: "result_grams_water"
+- assertVisible:
+    id: "result_grams_salt"
+- assertVisible:
+    id: "result_grams_yeast"

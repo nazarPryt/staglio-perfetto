@@ -53,6 +53,8 @@ export const RecipeBasicFields = ({
 						onChangeText={onNameChange}
 						placeholder="e.g. Neapolitan"
 						placeholderTextColor="#555"
+						testID="recipe_name_input"
+					accessibilityLabel="recipe_name_input"
 					/>
 				</View>
 				<View style={{ flex: 1 }}>
@@ -64,6 +66,7 @@ export const RecipeBasicFields = ({
 						keyboardType="decimal-pad"
 						placeholder="280"
 						placeholderTextColor="#555"
+						testID="ball-weight-input"
 					/>
 				</View>
 			</View>
@@ -74,6 +77,8 @@ export const RecipeBasicFields = ({
 					{METHODS.map((m) => (
 						<TouchableOpacity
 							key={m}
+							testID={`method_${m}`}
+							accessibilityLabel={`method_${m}`}
 							style={[styles.option, doughMethod === m && styles.optionActive]}
 							onPress={() => onDoughMethodChange(m)}
 						>
@@ -103,6 +108,7 @@ export const RecipeBasicFields = ({
 								keyboardType="decimal-pad"
 								placeholder="40"
 								placeholderTextColor="#555"
+								testID="preferment-flour-pct"
 							/>
 						</View>
 						<View style={styles.paramField}>
@@ -114,6 +120,7 @@ export const RecipeBasicFields = ({
 								keyboardType="decimal-pad"
 								placeholder="45"
 								placeholderTextColor="#555"
+								testID="preferment-hydration"
 							/>
 						</View>
 					</View>
@@ -126,6 +133,7 @@ export const RecipeBasicFields = ({
 							keyboardType="decimal-pad"
 							placeholder="0.2"
 							placeholderTextColor="#555"
+							testID="biga-yeast-pct"
 						/>
 						<Text style={styles.hint}>
 							e.g. 0.2 means 0.2% of biga flour weight
@@ -146,6 +154,7 @@ export const RecipeBasicFields = ({
 							keyboardType="decimal-pad"
 							placeholder="100"
 							placeholderTextColor="#555"
+							testID="autolyse-water-pct"
 						/>
 						<Text style={styles.hint}>
 							% of total water used in the autolyse step (default 100%)

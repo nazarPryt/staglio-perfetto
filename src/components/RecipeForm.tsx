@@ -158,7 +158,7 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 					onRemove={handleRemove}
 				/>
 
-				<TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
+				<TouchableOpacity style={styles.saveBtn} onPress={handleSave} testID="save_recipe_btn" accessibilityLabel="save_recipe_btn">
 					<Text style={styles.saveBtnText}>Save Recipe</Text>
 				</TouchableOpacity>
 			</ScrollView>

@@ -31,7 +31,7 @@ export const ResultTable = ({ result, header }: Props) => {
 
 			<View style={styles.row}>
 				<Text style={[styles.name, { flex: 3 }]}>Flour</Text>
-				<Text style={[styles.grams, { flex: 2, textAlign: "right" }]}>
+				<Text testID="result_flour_grams" style={[styles.grams, { flex: 2, textAlign: "right" }]}>
 					{flourGrams}g
 				</Text>
 				<Text style={[styles.pct, { flex: 1, textAlign: "right" }]}>100%</Text>
@@ -55,6 +55,7 @@ export const ResultTable = ({ result, header }: Props) => {
 						{ing.name}
 					</Text>
 					<Text
+						testID={`result_grams_${ing.name.toLowerCase().replace(/\s+/g, "_")}`}
 						style={[
 							styles.grams,
 							{ flex: 2, textAlign: "right" },
