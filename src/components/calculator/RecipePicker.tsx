@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { Card } from "@/components/ui/Card";
+import { FieldLabel } from "@/components/ui/FieldLabel";
 import type { Recipe } from "@/types/recipe";
 
 type Props = {
@@ -16,37 +18,39 @@ export const RecipePicker = ({ recipes, selectedId, onSelect }: Props) => {
 		: null;
 
 	return (
-		<View style={styles.section}>
-			<Text style={styles.label}>Recipe</Text>
+		<View className="mb-5">
+			<FieldLabel>Recipe</FieldLabel>
 			<TouchableOpacity
 				testID="recipe_picker"
 				accessibilityLabel="recipe_picker"
-				style={styles.picker}
+				className="bg-bg-surface rounded-lg border border-border p-3.5 flex-row justify-between"
 				onPress={() => setOpen((v) => !v)}
 			>
-				<Text style={styles.pickerText}>{selected?.name ?? "Select…"}</Text>
-				<Text style={styles.pickerChevron}>▾</Text>
+				<Text className="text-content-primary text-sm">
+					{selected?.name ?? "Select…"}
+				</Text>
+				<Text className="text-content-muted">▾</Text>
 			</TouchableOpacity>
 			{open && (
-				<View style={styles.pickerDropdown}>
+				<Card className="mt-1">
 					{recipes.map((r) => (
 						<TouchableOpacity
 							key={r.id}
 							testID={`recipe_option_${r.name.replace(/\s+/g, "_")}`}
 							accessibilityLabel={`recipe_option_${r.name.replace(/\s+/g, "_")}`}
-							style={styles.pickerOption}
+							className="p-3.5 border-b border-border"
 							onPress={() => {
 								onSelect(r.id);
 								setOpen(false);
 							}}
 						>
-							<Text style={styles.pickerOptionText}>{r.name}</Text>
+							<Text className="text-content-primary text-sm">{r.name}</Text>
 						</TouchableOpacity>
 					))}
-				</View>
+				</Card>
 			)}
 			{selected && totalDoughPerKg && (
-				<Text style={styles.hint}>
+				<Text className="text-content-faint text-label mt-1.5">
 					Ball weight: {selected.ballWeight}g · Dough per 1kg flour:{" "}
 					{totalDoughPerKg}g
 				</Text>
@@ -54,39 +58,3 @@ export const RecipePicker = ({ recipes, selectedId, onSelect }: Props) => {
 		</View>
 	);
 };
-
-const styles = StyleSheet.create({
-	section: { marginBottom: 20 },
-	label: {
-		color: "#888",
-		fontSize: 13,
-		textTransform: "uppercase",
-		letterSpacing: 0.5,
-		marginBottom: 6,
-	},
-	hint: { color: "#555", fontSize: 13, marginTop: 6 },
-	picker: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		padding: 14,
-		flexDirection: "row",
-		justifyContent: "space-between",
-	},
-	pickerText: { color: "#e0e0e0", fontSize: 15 },
-	pickerChevron: { color: "#888" },
-	pickerDropdown: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		marginTop: 4,
-	},
-	pickerOption: {
-		padding: 14,
-		borderBottomWidth: 1,
-		borderBottomColor: "#2a2a4a",
-	},
-	pickerOptionText: { color: "#e0e0e0", fontSize: 15 },
-});

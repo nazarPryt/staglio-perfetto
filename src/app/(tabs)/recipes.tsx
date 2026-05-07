@@ -1,16 +1,11 @@
 import { useState } from "react";
-import {
-	FlatList,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { RecipeCard } from "@/components/RecipeCard";
 import { RecipeForm } from "@/components/RecipeForm";
 import { useRecipeStore } from "@/store/recipeStore";
 import type { Recipe } from "@/types/recipe";
+import { BUILD } from "@/version";
 
 export default function RecipesScreen() {
 	const insets = useSafeAreaInsets();
@@ -42,16 +37,22 @@ export default function RecipesScreen() {
 	}
 
 	return (
-		<View style={[styles.container, { paddingTop: insets.top }]}>
-			<View style={styles.headerBar}>
-				<TouchableOpacity style={styles.newBtn} onPress={openNew} testID="new_recipe_btn" accessibilityLabel="new_recipe_btn">
-					<Text style={styles.newBtnText}>+ New</Text>
+		<View className="flex-1 bg-bg-screen" style={{ paddingTop: insets.top }}>
+			<View className="p-4 flex-row justify-between items-center border-b border-border">
+				<Text className="text-content-ghost text-xxs">build {BUILD}</Text>
+				<TouchableOpacity
+					className="bg-accent-blue rounded px-4.5 py-2.25"
+					onPress={openNew}
+					testID="new_recipe_btn"
+					accessibilityLabel="new_recipe_btn"
+				>
+					<Text className="text-black font-bold text-sm">+ New</Text>
 				</TouchableOpacity>
 			</View>
 
 			{recipes.length === 0 ? (
-				<View style={styles.empty}>
-					<Text style={styles.emptyText}>
+				<View className="flex-1 items-center justify-center">
+					<Text className="text-content-faint text-base">
 						No recipes yet. Tap + New to add one.
 					</Text>
 				</View>
@@ -59,7 +60,7 @@ export default function RecipesScreen() {
 				<FlatList
 					data={recipes}
 					keyExtractor={(r) => r.id}
-					contentContainerStyle={styles.list}
+					contentContainerStyle={{ padding: 16 }}
 					renderItem={({ item }) => (
 						<RecipeCard
 							recipe={item}
@@ -80,23 +81,3 @@ export default function RecipesScreen() {
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: { flex: 1, backgroundColor: "#0f0f1a" },
-	headerBar: {
-		padding: 16,
-		alignItems: "flex-end",
-		borderBottomWidth: 1,
-		borderBottomColor: "#2a2a4a",
-	},
-	newBtn: {
-		backgroundColor: "#7c9fff",
-		borderRadius: 6,
-		paddingVertical: 9,
-		paddingHorizontal: 18,
-	},
-	newBtnText: { color: "#000", fontWeight: "bold", fontSize: 15 },
-	empty: { flex: 1, alignItems: "center", justifyContent: "center" },
-	emptyText: { color: "#555", fontSize: 16 },
-	list: { padding: 16 },
-});

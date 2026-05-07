@@ -3,11 +3,11 @@ import {
 	Alert,
 	Modal,
 	ScrollView,
-	StyleSheet,
 	Text,
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { calcTotalDough, REQUIRED_IDS } from "@/bll/ingredientUtils";
 import { generateId } from "@/lib/generateId";
 import type { Recipe } from "@/types/recipe";
@@ -22,6 +22,7 @@ type Props = {
 };
 
 export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
+	const insets = useSafeAreaInsets();
 	const [state, dispatch] = useReducer(formReducer, initialFormState(initial));
 	const {
 		name,
@@ -98,15 +99,19 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 	return (
 		<Modal visible={visible} animationType="slide" onRequestClose={onClose}>
 			<ScrollView
-				style={styles.container}
-				contentContainerStyle={styles.content}
+				className="flex-1 bg-bg-screen"
+				contentContainerStyle={{
+					padding: 20,
+					paddingTop: insets.top + 20,
+					paddingBottom: insets.bottom + 48,
+				}}
 			>
-				<View style={styles.header}>
-					<Text style={styles.title}>
+				<View className="flex-row justify-between items-center mb-6">
+					<Text className="text-content-primary text-title font-bold">
 						{initial ? "Edit Recipe" : "New Recipe"}
 					</Text>
 					<TouchableOpacity onPress={onClose}>
-						<Text style={styles.closeBtn}>✕</Text>
+						<Text className="text-content-muted text-2xl p-1">✕</Text>
 					</TouchableOpacity>
 				</View>
 
@@ -158,30 +163,15 @@ export const RecipeForm = ({ visible, initial, onSave, onClose }: Props) => {
 					onRemove={handleRemove}
 				/>
 
-				<TouchableOpacity style={styles.saveBtn} onPress={handleSave} testID="save_recipe_btn" accessibilityLabel="save_recipe_btn">
-					<Text style={styles.saveBtnText}>Save Recipe</Text>
+				<TouchableOpacity
+					className="bg-accent-blue rounded-lg p-4.5 items-center"
+					onPress={handleSave}
+					testID="save_recipe_btn"
+					accessibilityLabel="save_recipe_btn"
+				>
+					<Text className="text-black font-bold text-md">Save Recipe</Text>
 				</TouchableOpacity>
 			</ScrollView>
 		</Modal>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: { flex: 1, backgroundColor: "#0f0f1a" },
-	content: { padding: 20, paddingBottom: 48 },
-	header: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginBottom: 24,
-	},
-	title: { color: "#e0e0e0", fontSize: 22, fontWeight: "bold" },
-	closeBtn: { color: "#888", fontSize: 24, padding: 4 },
-	saveBtn: {
-		backgroundColor: "#7c9fff",
-		borderRadius: 8,
-		padding: 18,
-		alignItems: "center",
-	},
-	saveBtnText: { color: "#000", fontWeight: "bold", fontSize: 17 },
-});

@@ -1,6 +1,7 @@
 import { useReducer, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import { calcResult, calcResultHeader } from "@/bll/calculatorUtils";
+import { FieldLabel } from "@/components/ui/FieldLabel";
 import type { Recipe } from "@/types/recipe";
 import {
 	ModeToggle,
@@ -35,8 +36,8 @@ export const CalculatorForm = ({ recipes }: Props) => {
 
 	if (recipes.length === 0) {
 		return (
-			<View style={styles.empty}>
-				<Text style={styles.emptyText}>
+			<View className="flex-1 items-center justify-center">
+				<Text className="text-content-faint text-base">
 					Add a recipe in the Recipes tab first.
 				</Text>
 			</View>
@@ -48,7 +49,7 @@ export const CalculatorForm = ({ recipes }: Props) => {
 		: "DIRECT";
 
 	return (
-		<View style={styles.container}>
+		<View className="flex-1">
 			<RecipePicker
 				recipes={recipes}
 				selectedId={selectedId}
@@ -60,16 +61,16 @@ export const CalculatorForm = ({ recipes }: Props) => {
 				onChange={(m) => dispatch({ type: "SET_MODE", mode: m })}
 			/>
 
-			<View style={styles.section}>
-				<Text style={styles.label}>
+			<View className="mb-5">
+				<FieldLabel>
 					{mode === "by-count"
 						? "Number of dough balls"
 						: "Flour available (kg)"}
-				</Text>
+				</FieldLabel>
 				<TextInput
 					testID="calculator_input"
 					accessibilityLabel="calculator_input"
-					style={styles.input}
+					className="bg-bg-surface rounded-lg border border-accent-blue text-content-primary text-lg font-bold py-3.5 px-4"
 					value={inputValue}
 					onChangeText={(value) => dispatch({ type: "SET_INPUT", value })}
 					keyboardType="decimal-pad"
@@ -79,22 +80,26 @@ export const CalculatorForm = ({ recipes }: Props) => {
 			</View>
 
 			{result?.kind === "error" && (
-				<View style={styles.errorBox}>
-					<Text style={styles.errorText}>{result.message}</Text>
+				<View className="bg-bg-error rounded-lg border border-accent-red p-3.5 mb-3">
+					<Text className="text-accent-red text-sm">{result.message}</Text>
 				</View>
 			)}
 
 			{result && result.kind === "single" && (
 				<>
-					<View style={styles.methodBadge}>
-						<Text style={styles.methodBadgeText}>{methodLabel}</Text>
+					<View className="self-start bg-bg-surface rounded-badge border border-accent-blue px-2.5 py-0.75 mb-3">
+						<Text className="text-accent-blue text-xxs tracking-label">
+							{methodLabel}
+						</Text>
 					</View>
 					<ResultTable result={result} mode={mode} header={header} />
 					<Pressable
-						style={styles.previewButton}
+						className="mt-4 bg-accent-green rounded-lg py-3.5 items-center"
 						onPress={() => setModalVisible(true)}
 					>
-						<Text style={styles.previewButtonText}>Preview</Text>
+						<Text className="text-bg-modal text-md font-bold uppercase tracking-label">
+							Preview
+						</Text>
 					</Pressable>
 					<ResultModal
 						visible={modalVisible}
@@ -108,15 +113,19 @@ export const CalculatorForm = ({ recipes }: Props) => {
 
 			{result && result.kind === "two-step" && (
 				<>
-					<View style={styles.methodBadge}>
-						<Text style={styles.methodBadgeText}>{methodLabel}</Text>
+					<View className="self-start bg-bg-surface rounded-badge border border-accent-blue px-2.5 py-0.75 mb-3">
+						<Text className="text-accent-blue text-xxs tracking-label">
+							{methodLabel}
+						</Text>
 					</View>
 					<TwoStepResult result={result} header={header} />
 					<Pressable
-						style={styles.previewButton}
+						className="mt-4 bg-accent-green rounded-lg py-3.5 items-center"
 						onPress={() => setModalVisible(true)}
 					>
-						<Text style={styles.previewButtonText}>Preview</Text>
+						<Text className="text-bg-modal text-md font-bold uppercase tracking-label">
+							Preview
+						</Text>
 					</Pressable>
 					<ResultModal
 						visible={modalVisible}
@@ -130,66 +139,3 @@ export const CalculatorForm = ({ recipes }: Props) => {
 		</View>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: { flex: 1 },
-	empty: { flex: 1, alignItems: "center", justifyContent: "center" },
-	emptyText: { color: "#555", fontSize: 16 },
-	section: { marginBottom: 20 },
-	label: {
-		color: "#888",
-		fontSize: 13,
-		textTransform: "uppercase",
-		letterSpacing: 0.5,
-		marginBottom: 6,
-	},
-	input: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#7c9fff",
-		color: "#e0e0e0",
-		fontSize: 26,
-		fontWeight: "bold",
-		paddingVertical: 14,
-		paddingHorizontal: 16,
-	},
-	methodBadge: {
-		alignSelf: "flex-start",
-		backgroundColor: "#1a1a2e",
-		borderRadius: 5,
-		borderWidth: 1,
-		borderColor: "#7c9fff",
-		paddingHorizontal: 10,
-		paddingVertical: 3,
-		marginBottom: 12,
-	},
-	methodBadgeText: {
-		color: "#7c9fff",
-		fontSize: 11,
-		letterSpacing: 0.5,
-	},
-	errorBox: {
-		backgroundColor: "#2a0d0d",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#ff7c7c",
-		padding: 14,
-		marginBottom: 12,
-	},
-	errorText: { color: "#ff7c7c", fontSize: 14 },
-	previewButton: {
-		marginTop: 16,
-		backgroundColor: "#7cffb2",
-		borderRadius: 8,
-		paddingVertical: 14,
-		alignItems: "center",
-	},
-	previewButtonText: {
-		color: "#0d0d1a",
-		fontSize: 17,
-		fontWeight: "bold",
-		textTransform: "uppercase",
-		letterSpacing: 0.5,
-	},
-});

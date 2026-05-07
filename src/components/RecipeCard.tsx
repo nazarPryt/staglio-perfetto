@@ -1,4 +1,5 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Card } from "@/components/ui/Card";
 import type { Recipe } from "@/types/recipe";
 
 type Props = {
@@ -20,46 +21,28 @@ export const RecipeCard = ({ recipe, onEdit, onDelete }: Props) => {
 	}
 
 	return (
-		<View style={styles.card}>
-			<View style={styles.info}>
-				<Text style={styles.name}>{recipe.name}</Text>
-				<Text style={styles.summaryLine}>
+		<Card className="p-4 flex-row justify-between items-start mb-3">
+			<View className="flex-1 mr-2">
+				<Text className="text-content-primary font-bold text-md">
+					{recipe.name}
+				</Text>
+				<Text className="text-content-muted text-label mt-0.75">
 					Ball weight: {recipe.ballWeight}g
 				</Text>
 				{recipe.ingredients.map((i) => (
-					<Text key={i.id} style={styles.summaryLine}>
+					<Text key={i.id} className="text-content-muted text-label mt-0.75">
 						{i.name}: {(i.grams / 10).toFixed(1)}%
 					</Text>
 				))}
 			</View>
-			<View style={styles.actions}>
+			<View className="flex-row gap-4">
 				<TouchableOpacity onPress={onEdit}>
-					<Text style={styles.editBtn}>Edit</Text>
+					<Text className="text-accent-blue text-sm">Edit</Text>
 				</TouchableOpacity>
 				<TouchableOpacity onPress={handleDelete}>
-					<Text style={styles.deleteBtn}>Delete</Text>
+					<Text className="text-accent-red text-sm">Delete</Text>
 				</TouchableOpacity>
 			</View>
-		</View>
+		</Card>
 	);
 };
-
-const styles = StyleSheet.create({
-	card: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		padding: 16,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "flex-start",
-		marginBottom: 12,
-	},
-	info: { flex: 1, marginRight: 8 },
-	name: { color: "#e0e0e0", fontWeight: "bold", fontSize: 17 },
-	summaryLine: { color: "#888", fontSize: 13, marginTop: 3 },
-	actions: { flexDirection: "row", gap: 16 },
-	editBtn: { color: "#7c9fff", fontSize: 15 },
-	deleteBtn: { color: "#ff7c7c", fontSize: 15 },
-});

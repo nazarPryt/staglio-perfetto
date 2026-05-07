@@ -1,6 +1,7 @@
 import { useKeepAwake } from "expo-keep-awake";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Card } from "@/components/ui/Card";
 import type { DoughCalcResult, Mode } from "@/types/recipe";
 import { ResultTable } from "./ResultTable";
 import { TwoStepResult } from "./TwoStepResult";
@@ -28,12 +29,16 @@ export const ResultModal = ({
 	return (
 		<Modal visible={visible} animationType="slide" onRequestClose={onClose}>
 			{visible && <KeepAwake />}
-			<SafeAreaView style={styles.safeArea}>
-				<View style={styles.container}>
-					<View style={styles.topBar}>
-						<Text style={styles.title}>Recipe Preview</Text>
-						<Pressable onPress={onClose} style={styles.closeButton}>
-							<Text style={styles.closeText}>✕ Close</Text>
+			<SafeAreaView className="flex-1 bg-bg-modal">
+				<View className="flex-1 p-5">
+					<View className="flex-row items-center justify-between mb-6">
+						<Text className="text-accent-green text-xl font-bold uppercase tracking-label">
+							Recipe Preview
+						</Text>
+						<Pressable onPress={onClose}>
+							<Card className="py-2.5 px-4">
+								<Text className="text-content-primary text-base">✕ Close</Text>
+							</Card>
 						</Pressable>
 					</View>
 					{result.kind === "single" && (
@@ -42,42 +47,11 @@ export const ResultModal = ({
 					{result.kind === "two-step" && (
 						<TwoStepResult result={result} header={header} />
 					)}
-					<Text style={styles.hint}>Screen stays on while this is open.</Text>
+					<Text className="text-content-ghost text-label text-center mt-6">
+						Screen stays on while this is open.
+					</Text>
 				</View>
 			</SafeAreaView>
 		</Modal>
 	);
 };
-
-const styles = StyleSheet.create({
-	safeArea: { flex: 1, backgroundColor: "#0d0d1a" },
-	container: { flex: 1, padding: 20 },
-	topBar: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		marginBottom: 24,
-	},
-	title: {
-		color: "#7cffb2",
-		fontSize: 20,
-		fontWeight: "bold",
-		textTransform: "uppercase",
-		letterSpacing: 0.5,
-	},
-	closeButton: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		paddingVertical: 10,
-		paddingHorizontal: 16,
-	},
-	closeText: { color: "#e0e0e0", fontSize: 16 },
-	hint: {
-		color: "#444",
-		fontSize: 13,
-		textAlign: "center",
-		marginTop: 24,
-	},
-});

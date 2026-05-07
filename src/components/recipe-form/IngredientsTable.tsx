@@ -1,6 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { REQUIRED_IDS } from "@/bll/ingredientUtils";
 import { IngredientRow } from "@/components/IngredientRow";
+import { Card } from "@/components/ui/Card";
+import { FieldLabel } from "@/components/ui/FieldLabel";
 import type { Ingredient, IngredientType } from "@/types/recipe";
 
 type Props = {
@@ -26,28 +28,32 @@ export const IngredientsTable = ({
 }: Props) => {
 	return (
 		<>
-			<Text style={styles.label}>Ingredients for 1 kg of flour</Text>
+			<FieldLabel>Ingredients for 1 kg of flour</FieldLabel>
 
-			<View style={styles.tableHeader}>
-				<Text style={[styles.headerCell, { flex: 2 }]}>Ingredient</Text>
-				<Text style={[styles.headerCell, { flex: 1, textAlign: "right" }]}>
+			<View className="flex-row px-1 mb-1.5 mt-2.5">
+				<Text className="text-content-faint text-xs uppercase flex-[2]">
+					Ingredient
+				</Text>
+				<Text className="text-content-faint text-xs uppercase flex-1 text-right">
 					Grams
 				</Text>
-				<Text style={[styles.headerCell, { flex: 1, textAlign: "right" }]}>
+				<Text className="text-content-faint text-xs uppercase flex-1 text-right">
 					%
 				</Text>
-				<View style={{ width: 24 }} />
+				<View className="w-6" />
 			</View>
 
-			<View style={styles.flourRow}>
-				<Text style={[styles.lockedCell, { flex: 2 }]}>Flour</Text>
-				<Text style={[styles.lockedCell, { flex: 1, textAlign: "right" }]}>
+			<View className="flex-row items-center gap-2 mb-2 px-1">
+				<Text className="text-content-disabled text-sm py-2.5 px-3 bg-bg-surface rounded-md border border-border-locked flex-[2]">
+					Flour
+				</Text>
+				<Text className="text-content-disabled text-sm py-2.5 px-3 bg-bg-surface rounded-md border border-border-locked flex-1 text-right">
 					1000
 				</Text>
-				<Text style={[styles.lockedCell, { flex: 1, textAlign: "right" }]}>
+				<Text className="text-content-disabled text-sm py-2.5 px-3 bg-bg-surface rounded-md border border-border-locked flex-1 text-right">
 					100%
 				</Text>
-				<View style={{ width: 24 }} />
+				<View className="w-6" />
 			</View>
 
 			{ingredients.map((ing) => {
@@ -74,60 +80,19 @@ export const IngredientsTable = ({
 			})}
 
 			<TouchableOpacity onPress={onAdd}>
-				<Text style={styles.addBtn}>+ Add ingredient</Text>
+				<Text className="text-accent-blue text-sm mt-2.5 mb-4.5">
+					+ Add ingredient
+				</Text>
 			</TouchableOpacity>
 
-			<View style={styles.totalRow}>
-				<Text style={styles.totalLabel}>Total dough per 1 kg flour</Text>
-				<Text style={styles.totalValue}>{totalDough.toFixed(0)} g</Text>
-			</View>
+			<Card className="flex-row justify-between p-4 mb-6">
+				<Text className="text-content-muted text-sm">
+					Total dough per 1 kg flour
+				</Text>
+				<Text className="text-accent-green text-base font-bold">
+					{totalDough.toFixed(0)} g
+				</Text>
+			</Card>
 		</>
 	);
 };
-
-const styles = StyleSheet.create({
-	label: {
-		color: "#888",
-		fontSize: 13,
-		textTransform: "uppercase",
-		letterSpacing: 0.5,
-		marginBottom: 6,
-	},
-	tableHeader: {
-		flexDirection: "row",
-		paddingHorizontal: 4,
-		marginBottom: 6,
-		marginTop: 10,
-	},
-	headerCell: { color: "#555", fontSize: 12, textTransform: "uppercase" },
-	flourRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 8,
-		marginBottom: 8,
-		paddingHorizontal: 4,
-	},
-	lockedCell: {
-		color: "#666",
-		fontSize: 15,
-		paddingVertical: 10,
-		paddingHorizontal: 12,
-		backgroundColor: "#1a1a2e",
-		borderRadius: 6,
-		borderWidth: 1,
-		borderColor: "#222",
-	},
-	addBtn: { color: "#7c9fff", fontSize: 15, marginTop: 10, marginBottom: 18 },
-	totalRow: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		padding: 16,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		marginBottom: 24,
-	},
-	totalLabel: { color: "#888", fontSize: 15 },
-	totalValue: { color: "#7cffb2", fontSize: 16, fontWeight: "bold" },
-});

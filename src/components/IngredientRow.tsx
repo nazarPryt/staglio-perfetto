@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-	StyleSheet,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import type { IngredientType } from "@/types/recipe";
 
 const TYPE_OPTIONS: IngredientType[] = ["water", "yeast", "salt", "other"];
@@ -44,13 +38,15 @@ export const IngredientRow = ({
 	}, [derivedPct]);
 
 	return (
-		<View style={styles.wrapper}>
-			<View style={styles.row}>
+		<View className="mb-2">
+			<View className="flex-row items-center gap-2">
 				{locked || !onNameChange ? (
-					<Text style={[styles.cell, styles.nameText]}>{name}</Text>
+					<Text className="text-content-disabled text-sm py-2.5 px-3 bg-bg-surface rounded-md border border-border-locked flex-[2]">
+						{name}
+					</Text>
 				) : (
 					<TextInput
-						style={[styles.cell, styles.input]}
+						className="bg-bg-surface rounded-lg border border-border text-content-primary text-sm py-3 px-3.5 flex-[2]"
 						value={name}
 						onChangeText={onNameChange}
 						placeholder="Ingredient"
@@ -58,7 +54,7 @@ export const IngredientRow = ({
 					/>
 				)}
 				<TextInput
-					style={[styles.cell, styles.input, styles.numericCell]}
+					className="bg-bg-surface rounded-lg border border-border text-content-primary text-sm py-3 px-3.5 flex-1 text-right"
 					value={grams}
 					onChangeText={onGramsChange}
 					keyboardType="decimal-pad"
@@ -67,7 +63,7 @@ export const IngredientRow = ({
 					testID={ingredientId ? `grams-${ingredientId}` : undefined}
 				/>
 				<TextInput
-					style={[styles.cell, styles.input, styles.numericCell]}
+					className="bg-bg-surface rounded-lg border border-border text-content-primary text-sm py-3 px-3.5 flex-1 text-right"
 					value={pctDisplay}
 					onChangeText={setPctDisplay}
 					onBlur={() => onPercentageChange(pctDisplay)}
@@ -75,30 +71,31 @@ export const IngredientRow = ({
 					placeholder="0"
 					placeholderTextColor="#555"
 				/>
-				<View style={styles.deleteCell}>
+				<View className="w-7 items-center">
 					{onDelete ? (
 						<TouchableOpacity onPress={onDelete}>
-							<Text style={styles.deleteBtn}>✕</Text>
+							<Text className="text-accent-red text-lg">✕</Text>
 						</TouchableOpacity>
 					) : (
-						<Text style={styles.lockIcon}>🔒</Text>
+						<Text className="text-sm">🔒</Text>
 					)}
 				</View>
 			</View>
 
 			{!locked && onTypeChange && (
-				<View style={styles.typeRow}>
+				<View className="flex-row gap-1.5 mt-1 pl-1">
 					{TYPE_OPTIONS.map((t) => (
 						<TouchableOpacity
 							key={t}
-							style={[styles.typeChip, type === t && styles.typeChipActive]}
+							className={`px-2.5 py-1 rounded-chip border ${
+								type === t
+									? "border-accent-blue bg-bg-active"
+									: "border-border bg-bg-surface"
+							}`}
 							onPress={() => onTypeChange(t)}
 						>
 							<Text
-								style={[
-									styles.typeChipText,
-									type === t && styles.typeChipTextActive,
-								]}
+								className={`text-xxs ${type === t ? "text-accent-blue font-bold" : "text-content-faint"}`}
 							>
 								{t}
 							</Text>
@@ -109,57 +106,3 @@ export const IngredientRow = ({
 		</View>
 	);
 };
-
-const styles = StyleSheet.create({
-	wrapper: { marginBottom: 8 },
-	row: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 8,
-	},
-	cell: { flex: 2 },
-	numericCell: { flex: 1, textAlign: "right" },
-	nameText: {
-		color: "#666",
-		fontSize: 15,
-		paddingVertical: 10,
-		paddingHorizontal: 12,
-		backgroundColor: "#1a1a2e",
-		borderRadius: 6,
-		borderWidth: 1,
-		borderColor: "#222",
-	},
-	input: {
-		backgroundColor: "#1a1a2e",
-		borderRadius: 6,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		color: "#7c9fff",
-		fontSize: 15,
-		paddingVertical: 10,
-		paddingHorizontal: 12,
-	},
-	deleteCell: { width: 28, alignItems: "center" },
-	deleteBtn: { color: "#ff7c7c", fontSize: 18 },
-	lockIcon: { fontSize: 14 },
-	typeRow: {
-		flexDirection: "row",
-		gap: 6,
-		marginTop: 4,
-		paddingLeft: 4,
-	},
-	typeChip: {
-		paddingHorizontal: 10,
-		paddingVertical: 4,
-		borderRadius: 12,
-		borderWidth: 1,
-		borderColor: "#2a2a4a",
-		backgroundColor: "#1a1a2e",
-	},
-	typeChipActive: {
-		borderColor: "#7c9fff",
-		backgroundColor: "#1a1a40",
-	},
-	typeChipText: { color: "#555", fontSize: 11 },
-	typeChipTextActive: { color: "#7c9fff", fontWeight: "bold" },
-});
