@@ -1,0 +1,43 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# ⚠️ huge dough: 50 kg flour → large number formatting
+# bigaFlour=20000, bigaWater=9000, bigaYeast=40
+# totalDough=round1(50000+32500+150+1250)=83900g
+- launchApp
+- runFlow: ../../helpers/setup_biga_recipe.yaml
+
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Biga"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "50"
+
+- scrollUntilVisible:
+    element:
+      id: "step1_label"
+    direction: DOWN
+
+- assertVisible:
+    id: "step1_label"
+- assertVisible:
+    id: "step2_label"
+
+- scrollUntilVisible:
+    element:
+      id: "result_total_flour"
+    direction: DOWN
+
+- assertVisible:
+    id: "result_total_flour"
+- assertVisible:
+    text: "50000g"
+- assertVisible:
+    id: "result_total_dough"
+- assertVisible:
+    text: "83900g"

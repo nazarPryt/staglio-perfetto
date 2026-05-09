@@ -1,0 +1,22 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# ❌ biga water exceeds total water → error banner
+# prefermentFlour=80%, prefermentHydration=70%, water=500g, flour=1kg
+# bigaWater = round1(800*0.70) = 560 > totalWater = 500
+- launchApp
+- runFlow: ../../helpers/setup_biga_water_error_recipe.yaml
+
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Biga_Water_Error"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "1"
+
+- assertVisible:
+    text: "Biga hydration exceeds recipe hydration"

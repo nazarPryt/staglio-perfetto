@@ -1,0 +1,27 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# Biga recipe with prefermentFlourPct=0 (boundary case):
+# Entering "0" exposes a form bug: parseFloat("0")||40 silently defaults to 40
+- waitForAnimationToEnd
+- tapOn:
+    point: "50%,50%"
+- tapOn:
+    id: "new_recipe_btn"
+- tapOn:
+    id: "recipe_name_input"
+- inputText: "E2E Biga Pref Zero"
+- hideKeyboard
+- tapOn:
+    id: "method_biga"
+- tapOn:
+    id: "preferment-flour-pct"
+- eraseText
+- inputText: "0"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "save_recipe_btn"
+    direction: DOWN
+- tapOn:
+    id: "save_recipe_btn"
+- waitForAnimationToEnd

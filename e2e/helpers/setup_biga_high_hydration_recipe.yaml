@@ -1,0 +1,31 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# Biga recipe with 90% hydration (water=900g):
+# With 1kg flour: bigaWater=180, finalWater=720, totalDough=1928g
+- waitForAnimationToEnd
+- tapOn:
+    point: "50%,50%"
+- tapOn:
+    id: "new_recipe_btn"
+- tapOn:
+    id: "recipe_name_input"
+- inputText: "E2E Biga High Hydration"
+- hideKeyboard
+- tapOn:
+    id: "method_biga"
+- scrollUntilVisible:
+    element:
+      id: "grams-water"
+    direction: DOWN
+- tapOn:
+    id: "grams-water"
+- eraseText
+- inputText: "900"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "save_recipe_btn"
+    direction: DOWN
+- tapOn:
+    id: "save_recipe_btn"
+- waitForAnimationToEnd

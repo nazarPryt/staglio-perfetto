@@ -1,0 +1,28 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# ⚠️ autolyse 90% water → finalWater=65g → water row visible in step2
+# With 1kg flour, water=650g: autolyseWater=585, finalWater=65
+- launchApp
+- runFlow: ../../helpers/setup_autolyse_partial_recipe.yaml
+
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Autolyse_90"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "1"
+
+- scrollUntilVisible:
+    element:
+      id: "step2_label_grams_water"
+    direction: DOWN
+
+- assertVisible:
+    id: "step2_label_grams_water"
+- assertVisible:
+    text: "65g"

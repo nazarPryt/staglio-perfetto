@@ -1,0 +1,28 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# Biga recipe with prefermentFlourPct=100 (boundary case):
+# With 1kg flour: bigaFlour=1000, finalFlour=0 → step2 has no flour row
+# bigaWater=450 <= totalWater=650 ✓, bigaYeast=2 <= totalYeast=3 ✓
+- waitForAnimationToEnd
+- tapOn:
+    point: "50%,50%"
+- tapOn:
+    id: "new_recipe_btn"
+- tapOn:
+    id: "recipe_name_input"
+- inputText: "E2E Biga Pref Full"
+- hideKeyboard
+- tapOn:
+    id: "method_biga"
+- tapOn:
+    id: "preferment-flour-pct"
+- eraseText
+- inputText: "100"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "save_recipe_btn"
+    direction: DOWN
+- tapOn:
+    id: "save_recipe_btn"
+- waitForAnimationToEnd

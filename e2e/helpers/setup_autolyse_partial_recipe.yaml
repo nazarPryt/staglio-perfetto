@@ -1,0 +1,27 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# Autolyse recipe with 90% autolyse water:
+# With 1kg flour, water=650g: autolyseWater=585g, finalWater=65g (visible in step2)
+- waitForAnimationToEnd
+- tapOn:
+    point: "50%,50%"
+- tapOn:
+    id: "new_recipe_btn"
+- tapOn:
+    id: "recipe_name_input"
+- inputText: "E2E Autolyse 90"
+- hideKeyboard
+- tapOn:
+    id: "method_autolyse"
+- tapOn:
+    id: "autolyse-water-pct"
+- eraseText
+- inputText: "90"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "save_recipe_btn"
+    direction: DOWN
+- tapOn:
+    id: "save_recipe_btn"
+- waitForAnimationToEnd

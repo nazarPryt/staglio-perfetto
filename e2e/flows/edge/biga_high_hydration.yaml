@@ -1,0 +1,42 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# ⚠️ high hydration dough (90%) → verify rendering, no overflow
+# water=900g, flour=1kg: bigaWater=180, finalWater=720, totalDough=1928g
+- launchApp
+- runFlow: ../../helpers/setup_biga_high_hydration_recipe.yaml
+
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Biga_High_Hydration"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "1"
+
+- scrollUntilVisible:
+    element:
+      id: "step1_label"
+    direction: DOWN
+
+- assertVisible:
+    id: "step1_label"
+- assertVisible:
+    id: "step2_label"
+
+- scrollUntilVisible:
+    element:
+      id: "result_total_dough"
+    direction: DOWN
+
+- assertVisible:
+    id: "result_total_flour"
+- assertVisible:
+    text: "1000g"
+- assertVisible:
+    id: "result_total_dough"
+- assertVisible:
+    text: "1928g"

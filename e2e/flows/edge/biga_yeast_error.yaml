@@ -1,0 +1,22 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# ❌ biga yeast exceeds total yeast → error banner
+# bigaYeastPct=1%, yeast=1g, flour=1kg
+# bigaYeast = round1(400*1/100) = 4 > totalYeast = 1
+- launchApp
+- runFlow: ../../helpers/setup_biga_yeast_error_recipe.yaml
+
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Biga_Yeast_Error"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "1"
+
+- assertVisible:
+    text: "Biga yeast exceeds total yeast"

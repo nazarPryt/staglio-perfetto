@@ -104,3 +104,51 @@ describe("calcBiga", () => {
 		expect((result as CalcError).message).toMatch(/yeast/i);
 	});
 });
+
+describe("calcBiga — boundary cases", () => {
+	test("preferment 0%: bigaFlour=0, no error, finalFlour=totalFlour", () => {
+		const r = { ...recipe, prefermentFlourPct: 0 };
+		const result = calcBiga(r, 1000) as TwoStepDoughResult;
+		expect(result.kind).toBe("two-step");
+		expect(result.step1.flourGrams).toBe(0);
+		expect(result.step2.flourGrams).toBe(1000);
+	});
+
+	test("preferment 100%: finalFlour=0, no error, bigaFlour=totalFlour", () => {
+		const r = { ...recipe, prefermentFlourPct: 100 };
+		const result = calcBiga(r, 1000) as TwoStepDoughResult;
+		expect(result.kind).toBe("two-step");
+		expect(result.step1.flourGrams).toBe(1000);
+		expect(result.step2.flourGrams).toBe(0);
+	});
+
+	test("tiny dough 100g: step1+step2 flour closure", () => {
+		const result = calcBiga(recipe, 100) as TwoStepDoughResult;
+		expect(result.kind).toBe("two-step");
+		expect(result.step1.flourGrams + result.step2.flourGrams).toBeCloseTo(100);
+	});
+
+	test("tiny dough 100g: yeast closure holds despite small values", () => {
+		const result = calcBiga(recipe, 100) as TwoStepDoughResult;
+		const bigaYeast =
+			result.step1.ingredients.find((i) => i.type === "yeast")?.grams ?? 0;
+		const finalYeast =
+			result.step2.ingredients.find((i) => i.type === "yeast")?.grams ?? 0;
+		expect(bigaYeast + finalYeast).toBeCloseTo(0.3, 1);
+	});
+
+	test("huge dough 50kg: totalDoughGrams is correct", () => {
+		const result = calcBiga(recipe, 50000) as TwoStepDoughResult;
+		expect(result.kind).toBe("two-step");
+		expect(result.totalFlourGrams).toBe(50000);
+		expect(result.totalDoughGrams).toBeCloseTo(83900, 0);
+	});
+
+	test("rounding consistency: step2.totalGrams includes step1 preferment", () => {
+		const result = calcBiga(recipe, 1000) as TwoStepDoughResult;
+		const preferment = result.step2.ingredients.find(
+			(i) => i.source === "preferment",
+		);
+		expect(preferment?.grams).toBeCloseTo(result.step1.totalGrams, 1);
+	});
+});

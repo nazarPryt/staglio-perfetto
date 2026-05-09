@@ -1,0 +1,41 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# ⚠️ preferment 0% → bigaFlour=0, step1 should have no flour row
+# KNOWN BUG: RecipeForm uses `parseFloat("0")||40` which silently defaults to 40.
+# This test is expected to FAIL until the form fallback is fixed.
+# Fix: use `Number.isNaN(parseFloat(v)) ? 40 : parseFloat(v)` in RecipeForm.
+- launchApp
+- runFlow: ../../helpers/setup_biga_preferment_zero_recipe.yaml
+
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Biga_Pref_Zero"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "1"
+
+- scrollUntilVisible:
+    element:
+      id: "step1_label"
+    direction: DOWN
+
+- assertVisible:
+    id: "step1_label"
+# step1_label_flour_grams must NOT be rendered when bigaFlour=0
+- assertNotVisible:
+    id: "step1_label_flour_grams"
+
+- scrollUntilVisible:
+    element:
+      id: "step2_label_flour_grams"
+    direction: DOWN
+
+- assertVisible:
+    id: "step2_label_flour_grams"
+- assertVisible:
+    text: "1000g"

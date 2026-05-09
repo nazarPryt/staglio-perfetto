@@ -1,0 +1,36 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# Biga recipe that triggers "biga yeast exceeds total yeast" error:
+# bigaYeastPct=1%, yeast=1g
+# With 1kg flour: bigaYeast=round1(400*1/100)=4 > totalYeast=1
+- waitForAnimationToEnd
+- tapOn:
+    point: "50%,50%"
+- tapOn:
+    id: "new_recipe_btn"
+- tapOn:
+    id: "recipe_name_input"
+- inputText: "E2E Biga Yeast Error"
+- hideKeyboard
+- tapOn:
+    id: "method_biga"
+- tapOn:
+    id: "biga-yeast-pct"
+- eraseText
+- inputText: "1"
+- scrollUntilVisible:
+    element:
+      id: "grams-yeast"
+    direction: DOWN
+- tapOn:
+    id: "grams-yeast"
+- eraseText
+- inputText: "1"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "save_recipe_btn"
+    direction: DOWN
+- tapOn:
+    id: "save_recipe_btn"
+- waitForAnimationToEnd

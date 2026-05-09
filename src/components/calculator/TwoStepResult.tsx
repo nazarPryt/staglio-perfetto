@@ -31,7 +31,10 @@ const StepBlock = ({ step, title, testID }: StepBlockProps) => (
 		{step.flourGrams > 0 && (
 			<View className="flex-row py-4 border-b border-border">
 				<Text className="text-content-secondary text-lg flex-[3]">Flour</Text>
-				<Text className="text-content-primary text-lg font-bold flex-[2] text-right">
+				<Text
+					testID={testID ? `${testID}_flour_grams` : undefined}
+					className="text-content-primary text-lg font-bold flex-[2] text-right"
+				>
 					{Math.round(step.flourGrams)}g
 				</Text>
 				<Text className="text-content-disabled text-base flex-[1] text-right">

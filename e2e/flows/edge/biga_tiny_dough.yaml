@@ -1,0 +1,43 @@
+appId: com.nazarpryt.staglioperfetto
+---
+# ⚠️ tiny dough: 0.1 kg flour → decimal precision
+# bigaFlour=40, bigaYeast=round1(0.08)=0.1 → Math.round→ "0g" (shows rounding behaviour)
+# totalDough=round1(100+65+0.3+2.5)=167.8 → "168g"
+- launchApp
+- runFlow: ../../helpers/setup_biga_recipe.yaml
+
+- tapOn:
+    id: "tab_calculator"
+- tapOn:
+    id: "recipe_picker"
+- tapOn:
+    id: "recipe_option_E2E_Biga"
+- tapOn:
+    id: "mode_by_flour"
+- tapOn:
+    id: "calculator_input"
+- inputText: "0.1"
+
+- scrollUntilVisible:
+    element:
+      id: "step1_label"
+    direction: DOWN
+
+- assertVisible:
+    id: "step1_label"
+- assertVisible:
+    id: "step2_label"
+
+- scrollUntilVisible:
+    element:
+      id: "result_total_flour"
+    direction: DOWN
+
+- assertVisible:
+    id: "result_total_flour"
+- assertVisible:
+    text: "100g"
+- assertVisible:
+    id: "result_total_dough"
+- assertVisible:
+    text: "168g"
