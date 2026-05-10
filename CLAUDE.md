@@ -1,53 +1,54 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Commands
 
 ```bash
-bun install          # install dependencies
-bun run start        # start Expo dev server (opens QR + platform options)
-bun run android      # start targeting Android emulator
-bun run ios          # start targeting iOS simulator
-bun run web          # start targeting web browser
-bun run check        # Biome: lint + format check + import sorting
-bun run format       # Biome: auto-format all files
-bun run test         # run all Jest tests
-bun run test -- --testPathPattern=bll  # run a single test file/folder
+bun install
+bun run start        # Expo dev server
+bun run android      # Android emulator
+bun run ios          # iOS simulator
+bun run web
+bun run check        # Biome lint + format check (run before committing)
+bun run format       # Biome auto-format
+bun run test
+bun run test -- --testPathPattern=bll   # single file/folder
+maestro test e2e/flows/calc_direct.yaml # e2e (requires running emulator)
 ```
 
-## Architecture
+## Layout
 
-Pizza dough recipe calculator — React Native / Expo app using **expo-router** for file-based routing. Entry point is `expo-router/entry` (`package.json#main`).
+All source lives under `src/`. The `@/` alias resolves to `src/` (not the repo root — the old config pointed to root; it was corrected).
 
-The codebase follows a layered architecture:
+Layers: `types/` → `bll/` → `dal/` → `store/` → `components/` → `app/`
 
-- **`types/`** — shared TypeScript types (`Recipe`, `Ingredient`, `CalcByCountResult`, `CalcByFlourResult`, etc.). Import from here everywhere.
-- **`bll/`** — pure business logic with no side effects. `calculations.ts` computes ingredient quantities either from ball count or from flour weight. All math lives here; this is the only layer covered by unit tests.
-- **`dal/`** — data access layer. `storage.ts` wraps `@react-native-async-storage/async-storage` behind `loadRecipes`/`saveRecipes`.
-- **`store/`** — Zustand store (`recipeStore.ts`) wires the DAL into a `persist` middleware adapter, exposing `addRecipe`, `updateRecipe`, `deleteRecipe`. Components read state via `useRecipeStore`.
-- **`components/`** — presentational components (`RecipeCard`, `RecipeForm`, `IngredientRow`, `CalculatorForm`). They receive props or call `useRecipeStore` directly.
-- **`lib/`** — tiny stateless utilities (`generateId.ts`).
+Tests mirror source under `src/__tests__/`. E2E flows are in `e2e/flows/` (happy paths), `e2e/flows/edge/` (boundary/error cases), `e2e/helpers/` (setup helpers).
 
-### Routing (`app/`)
+## Non-obvious domain rules
 
-- `app/_layout.tsx` — root layout, renders a `<Stack />`.
-- `app/(tabs)/_layout.tsx` — tab navigator with two tabs: **Recipes** and **Calculator**.
-- `app/(tabs)/recipes.tsx` — recipe list and management.
-- `app/(tabs)/calculator.tsx` — calculator screen; pulls recipes from the store and renders `<CalculatorForm>`.
+**Baker's percentages:** `Ingredient.grams` is stored per 1000g flour. 65% hydration = `{ grams: 650 }`. The UI converts to/from % using `pct × 10 = grams`.
 
-### Testing
+**Rounding:** All calc results use `Math.round(n * 10) / 10`. Never introduce more decimal places.
 
-Jest via `jest-expo` preset. Tests live in `__tests__/` mirroring the source structure (`__tests__/bll/`, `__tests__/dal/`). The `@/` alias is resolved by `moduleNameMapper` in `jest.config.js`. AsyncStorage is mocked via `jest-setup.ts`.
+**Biga returns errors:** `calcBiga` returns `CalcError` (not throws) when preferment water exceeds total water or preferment yeast exceeds total yeast. `CalculatorForm` renders errors inline.
 
-### Tooling
+**Locked ingredients:** `REQUIRED_IDS = Set(["water", "salt", "yeast"])` — these rows cannot be removed or renamed.
 
-- **Biome** (`biome.json`) handles linting, formatting, and import sorting. Tabs for indentation, double quotes for JS/TSX. VCS integration is on — Biome respects `.gitignore`.
+**Preferment source:** `IngredientResult.source === "preferment"` marks mixed-in preferment ingredients; `ResultTable` / `TwoStepResult` render them in green (`bg-preferment` / `accent-green` tokens).
 
-### Path aliases
+## Non-obvious implementation details
 
-`@/` maps to the repo root (`tsconfig.json`). Prefer `@/...` over relative imports.
+**`formReducer` stores numerics as strings** — all form fields (ballWeight, preferment percentages, etc.) are kept as raw strings so TextInput stays controlled. Parse on save, not in the reducer.
 
-### Platform splits
+**`calculatorReducer` clears input on recipe/mode change** — `SELECT_RECIPE` and `SET_MODE` both reset `inputValue` to `""`.
 
-Files ending in `.ios.tsx`, `.web.ts`, etc. are auto-selected by Metro/expo-router. Add platform-specific variants alongside the default file when behavior differs.
+**Custom Zustand storage adapter** — `recipeStore` uses a hand-rolled `dalStorage` adapter (not the built-in localStorage shim) to bridge Zustand `persist` middleware with the DAL's async `loadRecipes`/`saveRecipes`. Only `{ recipes }` is serialized.
+
+**Metro forces Zustand CJS on web** — Zustand's ESM build uses `import.meta`, which Metro doesn't support. `metro.config.js` explicitly resolves the CJS version for the web platform. Don't remove this without testing web.
+
+**`ResultModal` keeps the screen awake** via `expo-keep-awake` — intentional so the recipe stays visible while baking.
+
+## Tooling
+
+- **Biome** (`biome.json`): tabs, double quotes, VCS-aware. Single tool for lint + format + import sort.
+- **NativeWind 4 + Tailwind 3**: custom dark theme tokens in `tailwind.config.js`. Use existing tokens (`bg-surface`, `accent-blue`, `text-muted`, etc.) rather than raw hex values.
+- **jest-expo** preset; AsyncStorage mocked in `jest-setup.ts`.
