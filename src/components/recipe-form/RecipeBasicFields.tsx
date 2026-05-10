@@ -88,7 +88,7 @@ export const RecipeBasicFields = ({
 					</Text>
 					<View className="flex-row gap-2.5 mb-2.5">
 						<View className="flex-1 mb-2.5">
-							<FieldLabel>Preferment Flour %</FieldLabel>
+							<FieldLabel>Flour %</FieldLabel>
 							<TextInput
 								className="bg-bg-surface rounded-lg border border-border text-content-primary text-sm py-3 px-3.5"
 								value={prefermentFlourPct}
@@ -100,7 +100,7 @@ export const RecipeBasicFields = ({
 							/>
 						</View>
 						<View className="flex-1 mb-2.5">
-							<FieldLabel>Preferment Hydration %</FieldLabel>
+							<FieldLabel>Hydration %</FieldLabel>
 							<TextInput
 								className="bg-bg-surface rounded-lg border border-border text-content-primary text-sm py-3 px-3.5"
 								value={prefermentHydration}

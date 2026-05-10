@@ -30,7 +30,7 @@ export const IngredientsTable = ({
 		<>
 			<FieldLabel>Ingredients for 1 kg of flour</FieldLabel>
 
-			<View className="flex-row px-1 mb-1.5 mt-2.5">
+			<View className="flex-row gap-2 mb-1.5 mt-2.5">
 				<Text className="text-content-faint text-xs uppercase flex-[2]">
 					Ingredient
 				</Text>
@@ -40,10 +40,10 @@ export const IngredientsTable = ({
 				<Text className="text-content-faint text-xs uppercase flex-1 text-right">
 					%
 				</Text>
-				<View className="w-6" />
+				<View className="w-7" />
 			</View>
 
-			<View className="flex-row items-center gap-2 mb-2 px-1">
+			<View className="flex-row items-center gap-2 mb-2">
 				<Text className="text-content-disabled text-sm py-2.5 px-3 bg-bg-surface rounded-md border border-border-locked flex-[2]">
 					Flour
 				</Text>
@@ -53,7 +53,7 @@ export const IngredientsTable = ({
 				<Text className="text-content-disabled text-sm py-2.5 px-3 bg-bg-surface rounded-md border border-border-locked flex-1 text-right">
 					100%
 				</Text>
-				<View className="w-6" />
+				<View className="w-7" />
 			</View>
 
 			{ingredients.map((ing) => {
